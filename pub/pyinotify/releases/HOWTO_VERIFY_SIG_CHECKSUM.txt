@@ -1,0 +1,6 @@
+1- Install gpg and sha256sum
+2- Run this command:
+   $ ./verify.sh pyinotify-0.8.7.tar.gz
+
+Replace the package version appropriately and be sure to have all the files 
+(verify.sh, .tar.gz, .tar.gz.asc and .tar.gz.sha256) in the same directory.

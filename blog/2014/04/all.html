@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>
+Blog
+</title>
+
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/pygments.css" rel="stylesheet">
+    <link href="/css/blog.css" rel="stylesheet">
+    
+    
+  </head>
+  <body>
+    
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <span class="navbar-brand">April 2014</span>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/archives.html">Archives</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    
+    <div class="container">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+        
+        <div class="entry">
+	  
+          <h2><a href="/blog/2014/04/28/tweetnacl_arithmetic_bug.html" class="noext">Arithmetic Bug in TweetNaCl
+</a></h2>
+	  
+          <h6><span class="pubdate">28 April 2014</span> <a class="permalink" title="Permalink" href="/blog/2014/04/28/tweetnacl_arithmetic_bug.html">&infin;</a></h6>
+
+          <div class="entry_content">
+            <p>This is the description of an arithmetic bug I found<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup> in one of the operations used during the computations of <a href="http://en.wikipedia.org/wiki/Curve25519">Curve25519</a> scalar multiplications in the <a href="http://tweetnacl.cr.yp.to/index.html">TweetNaCl library</a>.</p>
+<p>The culprit is the code handling the final reduction modulo 2<sup>255</sup> - 19 located in the function <code>pack25519()</code>. The following snippet presents the <a href="http://tweetnacl.cr.yp.to/20131229/tweetnacl.c">original code</a> <em>(version 20131229)</em> of this function:</p>
+<div class="codehilite"><pre><span class="n">sv</span> <span class="nf">pack25519</span><span class="p">(</span><span class="n">u8</span> <span class="o">*</span><span class="n">o</span><span class="p">,</span> <span class="k">const</span> <span class="n">gf</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">b</span><span class="p">;</span>
+  <span class="n">gf</span> <span class="n">m</span><span class="p">,</span><span class="n">t</span><span class="p">;</span>
+  <span class="n">FOR</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  <span class="n">car25519</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+  <span class="n">car25519</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+  <span class="n">car25519</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+  <span class="n">FOR</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mh">0xffed</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">15</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mh">0xffff</span><span class="o">-</span><span class="p">((</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">16</span><span class="p">)</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">);</span>
+      <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&amp;=</span><span class="mh">0xffff</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">m</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span><span class="o">-</span><span class="mh">0x7fff</span><span class="o">-</span><span class="p">((</span><span class="n">m</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">16</span><span class="p">)</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">b</span><span class="o">=</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">16</span><span class="p">)</span><span class="o">&amp;</span><span class="mi">1</span><span class="p">;</span>
+<span class="hll">    <span class="n">m</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span><span class="o">&amp;=</span><span class="mh">0xffff</span><span class="p">;</span>
+</span>    <span class="n">sel25519</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">b</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">FOR</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">16</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">o</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&amp;</span><span class="mh">0xff</span><span class="p">;</span>
+    <span class="n">o</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="mi">8</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>This bug is triggered when the last limb <code>n[15]</code> of the input argument <code>n</code> of this function is greater or equal than <code>0xffff</code>. In these cases the result of the scalar multiplication is not reduced as expected resulting in a wrong packed value. This code can be fixed simply by replacing <code>m[15]&amp;=0xffff;</code> by <code>m[14]&amp;=0xffff;</code>.</p>
+<p>Examples triggering this error are easy to generate. For instance, here is a case where a carefully selected<sup id="fnref:2"><a class="footnote-ref" href="#fn:2" rel="footnote">2</a></sup> scalar <code>n</code> when multiplied with the base point <code>(9, y)</code> in the Montgomery curve representation and using TweetNaCl's <code>scalarmult_base()</code> function outputs a wrong result:</p>
+<div class="codehilite"><pre>Scalar value n:
+ 76f6507a08e5d77a9a7b316d93cbb59b
+ afa2e13d1f84d181a35779e7fc471d19
+
+Wrong result obtained from bugged scalarmult_base(n) in pack25519():
+ 829253d8647cd88e3fb76358cfef0a91
+ 51aa8e7189fb6326dfb0603f6bff0000
+
+Expected result obtained from ref implementation:
+ 6f9253d8647cd88e3fb76358cfef0a91
+ 51aa8e7189fb6326dfb0603f6bffff7f
+</pre></div>
+
+
+<p>This error should be relatively frequent, it happens around or a bit less than one time for every 2<sup>16</sup> computations for computations with different scalar values or different points. However, beyond the wrongness of the resulting x-coordinate<sup id="fnref:3"><a class="footnote-ref" href="#fn:3" rel="footnote">3</a></sup>, and because this error happens at the end of computations steps there is no risk it could lead to greater damages like for instance revealing bits of user's secret. So just update your code with the <a href="http://tweetnacl.cr.yp.to/software.html">new version</a> <em>(20140427)</em> and you'll be fine.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Bug reported on 02-13-2014 to its authors.&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>This example was generated with <a href="/crypto/tweetnacl_bug.c">this code</a>.&#160;<a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>This bug is not limited to DH computations it should also affect the signature operations of EdDSA.&#160;<a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+          </div>
+        </div> <!-- entry -->
+        
+      </div> <!-- layout -->
+    </div> <!-- container -->
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

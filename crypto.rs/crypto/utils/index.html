@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `utils` mod in crate `crypto`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, utils">
+
+    <title>crypto::utils - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    <link rel="shortcut icon" href="http://www.rust-lang.org/favicon.ico">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        <a href='../../crypto/index.html'><img src='http://www.rust-lang.org/logos/rust-logo-128x128-blk.png' alt='' width='100'></a>
+        <p class='location'><a href='../index.html'>crypto</a></p><div class='block mod'><h2>Modules</h2><a class='mod ' href='../chacha20/index.html'>chacha20</a><a class='mod ' href='../curve41417/index.html'>curve41417</a><a class='mod ' href='../eke/index.html'>eke</a><a class='mod ' href='../encrypt/index.html'>encrypt</a><a class='mod ' href='../hash/index.html'>hash</a><a class='mod ' href='../kdf/index.html'>kdf</a><a class='mod ' href='../noise/index.html'>noise</a><a class='mod ' href='../poly1305/index.html'>poly1305</a><a class='mod ' href='../sbuf/index.html'>sbuf</a><a class='mod ' href='../sha3/index.html'>sha3</a><a class='mod current' href='../utils/index.html'>utils</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>crypto</a>::<wbr><a class='mod' href=''>utils</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-8' href='http://doc.rust-lang.org/common/utils/index.html?gotosrc=8'>[src]</a></span></h1>
+<div class='docblock'><p>Crypto utils</p>
+</div><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.bytes_cswap.html'
+                               title='crypto::utils::bytes_cswap'>bytes_cswap</a></td>
+                        <td class='docblock short'><p>Conditionally swap bytes.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.bytes_eq.html'
+                               title='crypto::utils::bytes_eq'>bytes_eq</a></td>
+                        <td class='docblock short'><p>Compare bytes buffers.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.copy_slice_memory.html'
+                               title='crypto::utils::copy_slice_memory'>copy_slice_memory</a></td>
+                        <td class='docblock short'><p>Copy memory buffer.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.pad16.html'
+                               title='crypto::utils::pad16'>pad16</a></td>
+                        <td class='docblock short'><p>Pad to multiple of 16.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.u32to8_le.html'
+                               title='crypto::utils::u32to8_le'>u32to8_le</a></td>
+                        <td class='docblock short'><p><code>u32</code> to <code>bytes</code> little-endian encoding.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.u64to8_le.html'
+                               title='crypto::utils::u64to8_le'>u64to8_le</a></td>
+                        <td class='docblock short'><p><code>u64</code> to <code>bytes</code> little-endian encoding.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.u8to32_le.html'
+                               title='crypto::utils::u8to32_le'>u8to32_le</a></td>
+                        <td class='docblock short'><p><code>Bytes</code> to <code>u32</code> little-endian decoding.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.u8to64_le.html'
+                               title='crypto::utils::u8to64_le'>u8to64_le</a></td>
+                        <td class='docblock short'><p><code>Bytes</code> to <code>u64</code> little-endian decoding.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.urandom_rng.html'
+                               title='crypto::utils::urandom_rng'>urandom_rng</a></td>
+                        <td class='docblock short'><p>Instanciate a secure RNG based on <code>urandom</code>.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.zero_memory.html'
+                               title='crypto::utils::zero_memory'>zero_memory</a></td>
+                        <td class='docblock short'><p>Zero-out memory buffer.</p>
+</td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "crypto";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>
+OpenSSL stripped-out from OpenSSH on OS X
+
+</title>
+
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/pygments.css" rel="stylesheet">
+    <link href="/css/blog.css" rel="stylesheet">
+    
+    
+  </head>
+  <body>
+    
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <span class="navbar-brand sd-title">Blog</span>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/archives.html">Archives</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	    <li>
+	      <a href="/rss" title="RSS Feed"><img src="/images/social_rss_square.svg" width="15" style="padding-bottom: 2px;" alt="RSS Feed"></a>
+	    </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    
+    <div class="container">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+        <div class="entry">
+	  
+          <h2><a href="/blog/2013/12/18/openssl_removed_from_openssh_on_osx.html" class="noext">OpenSSL stripped-out from OpenSSH on OS X
+</a></h2>
+	  
+          <h6><span class="pubdate">18 December 2013</span> <a class="permalink" title="Permalink" href="/blog/2013/12/18/openssl_removed_from_openssh_on_osx.html">&infin;</a></h6>
+
+          <div class="entry_content">
+            <p>The current situation of the crypto implementation of OpenSSH <a href="http://opensource.apple.com/source/OpenSSH/OpenSSH-186/">as shipped by Apple in OS X 10.9</a> is a real mess. Continuing their push in favor of <a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man3/Common%20Crypto.3cc.html">Common Crypto</a> and their deprecating of libcrypto (OpenSSL) they implemented in their version of OpenSSH a <a href="http://opensource.apple.com/source/OpenSSH/OpenSSH-186/osslshim/ossl/">new crypto module</a> compatible with OpenSSL's interface but targetting the Common Crypto library instead. However this implementation seems currently incomplete due to limitations of Common Crypto and as a result they also have embedded fallbacks on big chunks of OpenSSL code.</p>
+<p>A concrete shortcoming is that there is actually no elliptic curve support, thus it is not possible to generate EC keys and use ECDSA signatures for authentication.</p>
+          </div>
+        </div> <!-- entry -->
+      </div> <!-- layout -->
+    </div> <!-- container -->
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

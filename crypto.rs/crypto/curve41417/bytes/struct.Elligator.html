@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Elligator` struct in crate `crypto`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Elligator">
+
+    <title>crypto::curve41417::bytes::Elligator - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+
+    <link rel="shortcut icon" href="http://www.rust-lang.org/favicon.ico">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        <a href='../../../crypto/index.html'><img src='http://www.rust-lang.org/logos/rust-logo-128x128-blk.png' alt='' width='100'></a>
+        <p class='location'><a href='../../index.html'>crypto</a>::<wbr><a href='../index.html'>curve41417</a>::<wbr><a href='index.html'>bytes</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.B416.html'>B416</a><a class='struct ' href='struct.B512.html'>B512</a><a class='struct ' href='struct.B832.html'>B832</a><a class='struct ' href='struct.EdPoint.html'>EdPoint</a><a class='struct current' href='struct.Elligator.html'>Elligator</a><a class='struct ' href='struct.MontPoint.html'>MontPoint</a><a class='struct ' href='struct.Scalar.html'>Scalar</a></div><div class='block trait'><h2>Traits</h2><a class='trait ' href='trait.Bytes.html'>Bytes</a><a class='trait ' href='trait.Reducible.html'>Reducible</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>crypto</a>::<wbr><a href='../index.html'>curve41417</a>::<wbr><a href='index.html'>bytes</a>::<wbr><a class='struct' href=''>Elligator</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-2849' href='http://doc.rust-lang.org/curve41417/bytes/struct.Elligator.html?gotosrc=2849'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Elligator&lt;A = <a class='struct' href='../../../crypto/sbuf/struct.GuardedHeapAllocator.html' title='crypto::sbuf::GuardedHeapAllocator'>GuardedHeapAllocator</a>&gt;(pub <a class='struct' href='../../../crypto/curve41417/bytes/struct.B416.html' title='crypto::curve41417::bytes::B416'>B416</a>&lt;A&gt;);</pre><div class='docblock'><p>Wrapper around <code>B416</code> packed value used in crypto ops.</p>
+
+<p>It is used to constrain input parameters and result values used
+and returned in crypto operations in order to prevent wrong parameter
+passing.</p>
+
+<ul>
+<li><code>Scalar</code> wraps a scalar value</li>
+<li><code>MontPoint</code> wraps a point in Montgomery&#39;s representation</li>
+<li><code>EdPoint</code> wraps a point in Edwards representation</li>
+<li><code>Elligator</code> wraps an indistinguishable Elligator byte-string</li>
+</ul>
+
+<p>For instance you might create a new secret key like this:</p>
+<pre class='rust '>
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>s</span>: <span class='ident'>B416</span> <span class='op'>=</span> <span class='ident'>Bytes</span>::<span class='ident'>new_rand</span>();
+<span class='ident'>s</span>.<span class='ident'>clamp_41417</span>();
+<span class='kw'>let</span> <span class='ident'>sk</span> <span class='op'>=</span> <span class='ident'>Scalar</span>(<span class='ident'>s</span>);
+<span class='kw'>let</span> <span class='ident'>pk</span>: <span class='ident'>MontPoint</span> <span class='op'>=</span> <span class='ident'>mont</span>::<span class='ident'>scalar_mult_base</span>(<span class='kw-2'>&amp;</span><span class='ident'>sk</span>);
+</pre>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.get' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.get' class='fnname'>get</a>(&amp;self) -&gt; &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.B416.html' title='crypto::curve41417::bytes::B416'>B416</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return the wrapped value as a reference.</p>
+</div><h4 id='method.get_byte' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.get_byte' class='fnname'>get_byte</a>(&amp;self, index: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></h4>
+<div class='docblock'><p>Return a reference to the byte at index <code>index</code>. Fails if
+<code>index</code> is out of bounds.</p>
+</div><h4 id='method.unwrap' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.unwrap' class='fnname'>unwrap</a>(self) -&gt; <a class='struct' href='../../../crypto/curve41417/bytes/struct.B416.html' title='crypto::curve41417::bytes::B416'>B416</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return the wrapped value, consume <code>self</code>.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.clone' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h4>
+<h4 id='method.clone_from' class='method'><a class='stability Experimental' title='Experimental: this function is mostly unused'></a><code>fn <a href='#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.ne' class='fnname'>ne</a>(&amp;self, &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.assert_receiver_is_total_eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.assert_receiver_is_total_eq' class='fnname'>assert_receiver_is_total_eq</a>(&amp;self)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.fmt' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>, <a class='enum' href='http://doc.rust-lang.org/nightly/core/fmt/enum.FormatError.html' title='core::fmt::FormatError'>FormatError</a>&gt;</code></h4>
+<div class='docblock'><p>Format as hex-string.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, E, S: <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Encoder.html' title='serialize::serialize::Encoder'>Encoder</a>&lt;E&gt;&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Encodable.html' title='serialize::serialize::Encodable'>Encodable</a>&lt;S, E&gt; for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.encode' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.encode' class='fnname'>encode</a>(&amp;self, s: &amp;mut S) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>, E&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, E, D: <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Decoder.html' title='serialize::serialize::Decoder'>Decoder</a>&lt;E&gt;&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Decodable.html' title='serialize::serialize::Decodable'>Decodable</a>&lt;D, E&gt; for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.decode' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.decode' class='fnname'>decode</a>(d: &amp;mut D) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;, E&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Index.html' title='core::ops::Index'>Index</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt; for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.index' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.index' class='fnname'>index</a>(&amp;self, index: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/hex/trait.ToHex.html' title='serialize::hex::ToHex'>ToHex</a> for <a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.to_hex' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.to_hex' class='fnname'>to_hex</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "crypto";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    
+    <script async src="../../../search-index.js"></script>
+</body>
+</html>

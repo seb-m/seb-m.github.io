@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ChachaAead` struct in crate `crypto`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ChachaAead">
+
+    <title>crypto::chacha20::ChachaAead - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    <link rel="shortcut icon" href="http://www.rust-lang.org/favicon.ico">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        <a href='../../crypto/index.html'><img src='http://www.rust-lang.org/logos/rust-logo-128x128-blk.png' alt='' width='100'></a>
+        <p class='location'><a href='../index.html'>crypto</a>::<wbr><a href='index.html'>chacha20</a></p><div class='block struct'><h2>Structs</h2><a class='struct current' href='struct.ChachaAead.html'>ChachaAead</a><a class='struct ' href='struct.ChachaEncrypter.html'>ChachaEncrypter</a><a class='struct ' href='struct.ChachaStream.html'>ChachaStream</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.decrypt.html'>decrypt</a><a class='fn ' href='fn.encrypt.html'>encrypt</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>crypto</a>::<wbr><a href='index.html'>chacha20</a>::<wbr><a class='struct' href=''>ChachaAead</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-2731' href='../../src/crypto/Users/seb/git/crypto.rs.git/src/chacha20.rs.html#365-367'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct ChachaAead&lt;A = <a class='type' href='../../crypto/sbuf/type.DefaultAllocator.html' title='crypto::sbuf::DefaultAllocator'>DefaultAllocator</a>&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p><a href="http://tools.ietf.org/html/draft-irtf-cfrg-chacha20-poly1305-01">Chacha20-Poly1305 AEAD</a></p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='struct' href='../../crypto/chacha20/struct.ChachaAead.html' title='crypto::chacha20::ChachaAead'>ChachaAead</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.new' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.new' class='fnname'>new</a>(key: &amp;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, <a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../crypto/chacha20/struct.ChachaAead.html' title='crypto::chacha20::ChachaAead'>ChachaAead</a>&lt;A&gt;, <a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p>Return a new <code>ChachaAead</code> instance. <code>key</code> is the secret key of
+size <code>KEY_SIZE</code>.</p>
+</div><h4 id='method.seal' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.seal' class='fnname'>seal</a>(&amp;self, nonce: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, plaintext: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, aad: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, <a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;, <a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p><code>nonce</code> is a unique nonce of size <code>NONCE_AEAD_SIZE</code>, <code>plaintext</code>
+is the data to encrypt and authenticate. <code>aad</code> is some optional
+additional data to authenticate. The authenticated ciphertext
+is returned on output.</p>
+</div><h4 id='method.open' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.open' class='fnname'>open</a>(&amp;self, nonce: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, ciphertext: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, aad: <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, <a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;, <a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>&gt;</code></h4>
+<div class='docblock'><p><code>nonce</code> is a unique nonce of size <code>NONCE_AEAD_SIZE</code>, <code>ciphertext</code>
+is the authenticated and encypted data to decrypt. <code>aad</code> is some
+optional additional data authenticated with the ciphertext. This
+method returns the plaintext on output.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../crypto/chacha20/struct.ChachaAead.html' title='crypto::chacha20::ChachaAead'>ChachaAead</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.clone' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../crypto/chacha20/struct.ChachaAead.html' title='crypto::chacha20::ChachaAead'>ChachaAead</a>&lt;A&gt;</code></h4>
+<h4 id='method.clone_from' class='method'><a class='stability Experimental' title='Experimental: this function is mostly unused'></a><code>fn <a href='#tymethod.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "crypto";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

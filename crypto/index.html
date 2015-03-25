@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>Cryptography</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/" class="navbar-brand">Home</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    <div class="container content-streched main-content">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+      <div class="text-center">
+	<h2>Cryptography</h2>
+      </div>
+      <br />
+
+      <h4>List of ressources and documents</h4>
+      <i><small>Ordered by chronological order (oldest first)</small></i>
+      <ul>
+	<li><a href="/pub/old_src/rtgen-mt-0.2.tar.bz2">source code</a> &ndash; <a href="/pub/old_src/rtgen-mt-win-0.1.tar.bz2">win32 binary</a> &ndash; rtgen-mt a multi-threaded rainbow tables generator based on <a href="http://project-rainbowcrack.com/index.htm#download">rtgen</a> </li>
+	<li><a href="http://seb.dbzteam.org/pub/old_src/nt_crack_cell-0.2.tar.bz2">nt_crack_cell-0.2.tar.bz2</a> &ndash; NTLM-MD4 Cell BE. implementation</li>
+	<li><a href="http://code.google.com/p/keyczar/source/browse/#git%2Fcpp">source code</a> &ndash; <a href="http://code.google.com/p/keyczar/wiki/CppTutorial">tutorial</a> &ndash; C++ implementation of <a href="http://code.google.com/p/keyczar/">Keyczar</a></li>
+	<li><a href="openssl-attacks.html">openssl-attacks.html</a> &ndash; unmaintained list of cryptographic attacks against OpenSSL</li>
+	<li><a href="https://github.com/seb-m/sandbox/blob/master/curve25519p/smult.c">curve25519p/smult.c</a> &ndash; secret key randomization for Curve25519</li>
+	<li><a href="https://github.com/seb-m/sandbox/blob/master/ecdsa_25519.py">ecdsa_25519.py</a> &ndash; Curve25519 ECDSA signature</li>
+	<li><a href="python-oauth-timing-hmac.pdf">python-oauth-timing-hmac.pdf</a> &ndash; Python OAuth implementation flaws</li>
+	<li><a href="http://github.com/seb-m/wcurve">wcurve</a> &ndash; <a href="http://seb-m.github.com/wcurve/">documentation</a> &ndash; Python EC arithmetic on Weierstra&szlig; curves, also implements <a href="http://seb-m.github.com/wcurve/#wcurve.JacobianPoint.scalar_multiplication_infective">infective computations</a> techniques</li>
+	<li><a href="jpake-session-key-retrieval.pdf">jpake-session-key-retrieval.pdf</a> &ndash; Small subgroup confinement issue with session key retrieval in the J-PAKE implementations of OpenSSL and OpenSSH
+	  <ul>
+	    <li><a href="openssl-jpake.tar.gz">openssl-jpake.tar.gz</a> &ndash; OpenSSL demo source code</li>
+	    <li><a href="openssh-jpake.tar.gz">openssh-jpake.tar.gz</a> &ndash; OpenSSH demo source code</li>
+	    <li><a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2010-4252">CVE-2010-4252</a> &ndash; <a href="http://www.openssl.org/news/secadv_20101202.txt">advisory</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=20098">commit</a> &ndash; OpenSSL's advisory and fix written by OpenSSL's team</li>
+	    <li><a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2010-4478">CVE-2010-4478</a> &ndash; <a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/jpake.c?rev=1.5">commit/jpake.c</a> &ndash; <a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/schnorr.c?rev=1.4">commit/schnorr.c (1)</a> &ndash; <a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/schnorr.c?rev=1.5">commit/schnorr.c (2)</a> &ndash; <a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/jpake.c.diff?r1=1.4;r2=1.5">diff/jpake.c</a> &ndash; <a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/schnorr.c.diff?r1=1.3;r2=1.4;only_with_tag=MAIN">diff/schnorr.c (1)</a> &ndash; <a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/schnorr.c.diff?r1=1.4;r2=1.5;only_with_tag=MAIN">diff/schnorr.c (2)</a> &ndash; fix written by OpenSSH's team</li>
+	    <li><a href="/crypto/clipperz_srp_flaws.user.js">clipperz_srp_flaws.user.js</a> &ndash; Greasemonkey script demonstrating various <a href="http://www.clipperz.com/">Clipperz</a> flaws whose this small subrgoup confinement issue in its SRP implementation</li>
+	  </ul>
+	</li>
+	<li><a href="ec_infinity.c">ec_infinity.c</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=20228">related commit written by OpenSSL's team</a> (is it fixing all these issues though? haven't found time to review it yet) &ndash; issues in OpenSSL's handling of point at infinity in EC code</li>
+	<li><a href="/crypto/challenge_nginx/">challenge_nginx</a> &ndash; <a href="http://seb.dbzteam.org/crypto/challenge_nginx/solution/">solution</a> &ndash; a short crypto challenge targetting a modified version of Nginx</li>
+      </ul>
+      </div> <!-- layout -->
+    </div> <!--container -->
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

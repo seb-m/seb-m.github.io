@@ -1,0 +1,125 @@
+\section{Introduction}
+
+L'article~\cite{PS} étudié propose un nouveau schéma d'authentification et de signature. L'orginalité de ce schéma prouvé est d'être spécialement conçu pour minimiser les calculs nécessaires à son utilisation; de sorte qu'il soit parfaitement utilisable sur des supports à capacité de calcul restreinte comme les smart cards.
+
+Dans les sections suivantes nous rappelons brièvement l'état de l'art des schémas d'identification et de signature, en particulier ceux à apport de connaissance nul (zero-knowledge). Puis, nous présentons les schémas d'identification et de signature de l'article étudié, que nous désignerons par PS (Poupard--Stern). Finalement, nous introduisons l'idée des preuves que nous reproduirons lors de notre exposé.
+
+
+\section{Identification et Signature}
+
+Il existe plusieurs méthodes d'identification fortes par défi/réponses (à clé symétrique, ou à clé publique,...), le schéma de PS est un système de preuve interactif sans divulgation de connaissance, l'étude est concentrée sur ce type de méthode d'identification, ainsi que sur le schéma de signature associé.
+
+Les principales caractéristiques de ce type de schéma sont :
+
+\begin{list}{\texttt{$\bullet$}}{}
+\item Les systèmes de preuves interactifs zero-knowledge sont basés sur des échanges entre deux parties : un prouveur et un vérifieur probabiliste en temps polynomial. Le prouveur cherche à convaincre le vérifieur de son identité, en apportant la preuve de connaissance d'un secret, et ce sans le divulguer. La sécurité apportée par ce type de protocole est calculatoire, il peut être itéré $l$ fois, afin de renforcer sa complexité et de diminuer la probabilité d'être dupé par un acteur malhonnête.
+\item Un round (une itération complète du protocole) est généralement décomposé en trois échanges (Cf. section 2.1) : 1) l'engagement lors duquel le prouveur se lie à un élément aléatoire, 2) un challenge émis par le vérifieur pour lutter contre le rejeu, 3) la réponse du prouveur reposant sur l'engagement, le challenge, et le secret pourra être vérifiée par le vérifieur et ne divulguera aucune information sur le secret du prouveur.
+\item Les principaux schémas de signature reposent sur des problèmes réputés difficiles : la factorisation d'entier (ce schéma est basé sur ce problème), le problème équivalent d'extraction de racines carrée modulo un entier composé (Feige-Fiat-Shamir, Rabin), le logarithme discret (schéma de Schnorr), le problème RSA (schéma de Guillou-Quisquater, signature RSA).
+\end{list}
+
+À sécurité prouvée équivalente, la démocratisation de ces systèmes peut dépendre des efforts réalisés pour minimiser les complexités de calcul (surtout du côté du prouveur), et minimiser l'espace mémoire utilisé. Ce schéma a été élaboré dans cet objectif; il cherche à réduire la taille des clés, la taille de la signature, à privilégier (côté prouveur) les calculs offline aux calculs online et à réduire le nombre d'opérations online.
+
+
+\subsection{Schéma d'identification}
+
+Soient, $P$ prouveur, $V$ vérifieur, $N = PQ$ tels que $(P-1)/2=p$ et $(Q-1)/2=q$ avec $P, Q, p$ et $q$ premiers, $z \in (\ZZ/N\ZZ)^{*}$ tel que $pq\ |\ \omega_N(z)$. Le schéma d'identification est le suivant :
+
+\begin{enumerate}
+\item $P \rightarrow V\ :\ z^r\ mod\ N $, tel que $r\ \in_{R} [0, A[$
+\item $V \rightarrow P\ :\ e\ \in_{R} [0, B[ $
+\item $P \rightarrow V\ :\ r + (N - \varphi(N))e$
+\end{enumerate}
+
+Finalement, $V$ vérifie que $r + (N - \varphi(N))e < A$ (ce cas de figure peut se présenter car les opérations ne sont pas modulaires) et que $z^{r + (N - \varphi(N))e - Ne} = z^r\ mod\ N$.
+
+L'étape~1 peut être pré-calculée, alors que les étapes~2 et 3 sont effectuées au vol. Le principal calcul au vol, celui de l'étape~3 ne fait intervenir que deux opérations non modulaires. Grâce à l'utilisation de coupons le calcul de~1 peut être haché et par conséquent sa longeur réduite, diminuant le nombre de bits transmis. Nous verrons lors de la preuve que le taux d'échec de l'exécution de ce protocole peut être considéré comme négligeable.
+
+
+\subsection{Schéma de signature}
+
+Afin de tranformer le schéma d'identification en schéma de signature, le challenge aléatoire $e$ est remplacé par une fonction de hachage (qui peut être considérée comme un oracle aléatoire). Cette technique est courante et est employée entre autre dans~\cite{ZK}.
+
+\begin{enumerate}
+\item Pré-calcul : $x = z^r\ mod\ N $, tel que $r\ \in_{R} [0, A[$
+\item Calculs : $e = H(m, x)$, tel que $e\ \in_{R} [0, B[$ et $y = r + (N - \varphi(N))e$, si $y \geq A$ reprendre à l'étape~1
+\item Sortie : $(x, e, y)$
+\end{enumerate}
+
+Chacun peut s'assurer de la validité de la signature d'un message en vérifiant : $z^{y-Ne} = x\ mod\ N$, $e = H(m, x)$ et $y < A$.
+
+
+
+\subsection{Comparaison avec les autres schémas de signatures}
+
+\begin{tabular}{|p{2cm}|p{12cm}|}
+\hline
+\textbf{Schémas de signatures} & \textbf{Principales caractéristiques / Comparaisons avec PS} \\
+\hline
+\hline
+Poupard--Stern & Favorise les pré-calculs, 1 mult. non modulaire online, possibilité d'utiliser les coupons, clé secrète de la taille de la moitié du modulo.\\
+\hline
+RSA & Equivalence non prouvée avec le problème de factorisation. Non prouvé NHZK. La signature est réalisée avec la clé privée, forcément grande. Complexité importante des calculs, stockage important dans le cas de l'utilisation du thèorême Chinois.\\
+\hline
+Rabin & Calculs offline impossibles. Complexité du calcul de racine carrée modulo $N$ et exponentiation modulaire (RSA) comparables. Vérification de signature très rapide. \\
+\hline
+Feige-Fiat-Shamir & Dérivé d'un schéma d'identification ZK. Requiert en moyenne (seulement) $k/2$ mult. modulaires. L'importante (énorme) taille des clés publique et privée ($k\times|N|$), nécessite un important espace de stockage.\\
+%\hline
+%Guillou-Quisquater & Dérivé d'un schéma d'identification ZK. Variante de Feige-Fiat-Shamir basée sur le problème RSA, réduit la taille des clés. Complexité de calcul online, offline, et de vérification de signature plus importante que FFS. En revanche, nécessite moins d'espace de stockage.\\
+\hline
+El Gamal / DSA & Pré-caluls possibles, seulement 2 multiplications modulaires online. Longeur de signature importante pour El Gamal, et vérification de signature coûteuse.\\
+\hline
+Schnorr & Variante de El Gamal. Pré-computations possibles, plus efficace que DSA (une seule multiplication modulaire online), courte taille de signature.\\
+\hline
+GPS & Variante de Schnorr, pré-calculs offline, 1 mult. non-modulaires online, clefs publique/privé.\\
+% Taille de la clé publique 3 fois plus grande que celle de PS pour remédier aux problèmes de sécurité (**FIXME**: valide?).\\
+\hline
+\end{tabular}
+
+%\begin{tabular}{|p{2cm}|p{12cm}|}
+%\hline
+%GPS & Variante de Schnorr, pré-calculs offline, 1 mult. non-modulaires
+%online.\\
+% Taille de la clé publique 3 fois plus grande que celle de PS pour remédier aux problèmes de sécurité (**FIXME**: valide?).\\
+%\hline
+%\end{tabular}
+
+
+\section{Démonstration}
+
+Lors de notre présentation, nous reproduirons la preuve que c'est bien un protocole d'identification, et que c'est bien zero-knowledge et ce même si le vérifieur est malhonnête. L'approche suivie est celle de~\cite{ZK}.
+
+
+\subsection{Preuve du protocole d'identification}
+
+$(P, V)$ est un IPS (interactive proof system) pour un schéma d'identification s'il vérifie les deux propriétés suivantes :
+
+\begin{list}{\texttt{$\bullet$}}{}
+\item Completness : l'exécution entre un prouveur $P$ honnête qui connaît le secret (la factorisation de la clé publique $N$) et un vérifieur $V$ honnête sera toujours réussie avec une forte probabilité.
+\item Soundness : si $\textcircumacute{P}$ malhonnête est accepté par $V$ avec une probabilité non négligeable, alors $\textcircumacute{P}$ est capable de factoriser $N$ efficacement. Il sera montré que sous cette hypothèse la complexité de résolution de la factorisation reste calculatoirement impossible (sans la connaissance du secret).
+\end{list}
+
+%La première condition traduit le fait que $P$ peut convaincre $V$ de sa connaissance du secret, alors que la deuxième condition garantit qu'il n'existe pas de stratégie qui permette à $\textcircumacute{P}$ de tromper $V$ de telle sorte qu'il puisse obtenir la connaissance du secret.
+
+\subsection{Preuve du zero-knowledge}
+
+Le système $(P, V)$ est Zero-Knowledge, s'il vérifie la propriété :
+
+\begin{list}{\texttt{$\bullet$}}{}
+\item Zero-knowledge : même si un prouveur répète le protocole d'identification de multiples fois, aucun vérifieur $\textcircumacute{V}$ même malhonnête, et à puissance de calcul infinie ne peut déduire une quelconque information sur le secret. Il faut montrer que pour tout $\textcircumacute{V}$ il existe une machine $S$ capable de simuler en temps polynomial la communication entre $P$ et $\textcircumacute{V}$ de sorte que sa sortie (la distribution de triplets $(x_i,e_i,y_i)$) soit statistiquement indistingable de l'originale. $S$ ne connaît pas le secret, n'intéragit qu'avec $\textcircumacute{V}$, n'est pas détectable par $\textcircumacute{V}$, construit ses triplets $(x_i,e_i,y_i)$ en partant de la ``rèponse'' pour
+  obtenir la ``question'' $x$ (en calculant $z^{y-Ne}=x\ mod\ N$).
+\end{list}
+
+
+\section{Conclusion}
+
+Grâce à leur complexité de calcul avantageuse les algorithmes symétriques ont été historiquement privilégiés. Bien qu'ils soient efficaces, ils ont un défaut important dans le fait que chaque automate (vérifieur) doit stocker une clef maître. 
+
+Cependant, il existe une nouvelle classe de protocole d'identification et de signature d'inspiration asymétrique, qui a réduit ses besoins calculatoires au point de pouvoir être déployable sur des smart-cards traditionnelles sans crypto-processeur.
+
+Le schéma étudié est de cette catégorie, il repose sur un problème difficile, ne révèle pas d'information sur son secret, et est efficace.
+
+Il est toutefois nécessaire de préciser, que le schéma de ce type qui risque de s'imposer est le GPS~\cite{gps}, son schéma d'identification a été normalisé en 2004, et présente l'avantage d'offrir une paire de clefs publique/privé et d'avoir des tailles de clefs compatibles avec celles de RSA.
+
+
+
+

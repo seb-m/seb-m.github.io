@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `GroupElem` struct in crate `crypto`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, GroupElem">
+
+    <title>crypto::curve41417::ed::GroupElem - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+
+    <link rel="shortcut icon" href="http://www.rust-lang.org/favicon.ico">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        <a href='../../../crypto/index.html'><img src='http://www.rust-lang.org/logos/rust-logo-128x128-blk.png' alt='' width='100'></a>
+        <p class='location'><a href='../../index.html'>crypto</a>::<wbr><a href='../index.html'>curve41417</a>::<wbr><a href='index.html'>ed</a></p><div class='block struct'><h2>Structs</h2><a class='struct current' href='struct.GroupElem.html'>GroupElem</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>crypto</a>::<wbr><a href='../index.html'>curve41417</a>::<wbr><a href='index.html'>ed</a>::<wbr><a class='struct' href=''>GroupElem</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-5921' href='http://doc.rust-lang.org/curve41417/ed/struct.GroupElem.html?gotosrc=5921'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct GroupElem&lt;A = <a class='struct' href='../../../crypto/sbuf/struct.GuardedHeapAllocator.html' title='crypto::sbuf::GuardedHeapAllocator'>GuardedHeapAllocator</a>&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>A group element i.e. a point in Edwards representation.</p>
+
+<p>It handle various group elements operations such as scalar
+multiplications, point additions, Elligator point mapping,
+key pairs generation,...</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.new' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return a new group element with all its coordinates set to zero.</p>
+</div><h4 id='method.zero' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.zero' class='fnname'>zero</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return a group element with all its coordinates set to zero.</p>
+</div><h4 id='method.neutral' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.neutral' class='fnname'>neutral</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return the neutral point.</p>
+</div><h4 id='method.base' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.base' class='fnname'>base</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return the base point <code>(x, 34)</code> of prime order <code>L</code>.</p>
+</div><h4 id='method.unpack' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.unpack' class='fnname'>unpack</a>(bytes: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.EdPoint.html' title='crypto::curve41417::bytes::EdPoint'>EdPoint</a>&lt;A&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;&gt;</code></h4>
+<div class='docblock'><p>Unpack a Curve41417 point in Edwards representation from its
+<code>bytes</code> representation. <code>bytes</code> must hold a packed point wrapped
+in <code>EdPoint</code>, usually a previous result obtained from <code>pack()</code>.</p>
+</div><h4 id='method.pack' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.pack' class='fnname'>pack</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/bytes/struct.EdPoint.html' title='crypto::curve41417::bytes::EdPoint'>EdPoint</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Pack a group elem&#39;s coordinate <code>y</code> along with a sign bit taken from
+its <code>x</code> coordinate. This packed point may later be unpacked with
+<code>unpack()</code>.</p>
+</div><h4 id='method.scalar_mult' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.scalar_mult' class='fnname'>scalar_mult</a>(&amp;self, n: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return a point <code>q</code> such that <code>q=n.self</code> where <code>n</code> is the scalar
+value applied to the point <code>self</code>. Note that the value of <code>n</code> is
+not clamped by this method before the scalar multiplication is
+accomplished. Especially no cofactor multiplication is implicitly
+applied. Use <code>scalar_mult_cofactor()</code> prior to calling this method
+to explictly pre-cofactor this point.</p>
+
+<p>This method deliberately takes as input parameter a <code>B416</code> scalar
+instead of a <code>ScalarElem</code> for the reason that in some cases we don&#39;t
+want the bits of the scalar to be modified before any scalar
+multiplication. Whereas a <code>ScalarElem</code> would automatically be reduced
+<code>mod L</code> (see <code>base()</code>) before any scalar multiplication takes place.</p>
+</div><h4 id='method.scalar_mult_cofactor' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.scalar_mult_cofactor' class='fnname'>scalar_mult_cofactor</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return a point <code>q</code> such that <code>q=8.self</code> where <code>8</code> is curve&#39;s cofactor
+applied to this point&#39;s instance.</p>
+</div><h4 id='method.scalar_mult_base' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.scalar_mult_base' class='fnname'>scalar_mult_base</a>(n: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return point <code>q</code> such that <code>q=n.BP</code> where <code>n</code> is a scalar value applied
+to the base point <code>BP</code>. Note that <code>n</code> is not clamped by this method
+before the multiplication. Calling this method is equivalent to calling
+<code>GroupElem::base().scalar_mult(&amp;n)</code>.</p>
+</div><h4 id='method.double_scalar_mult' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.double_scalar_mult' class='fnname'>double_scalar_mult</a>(n1: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;, p1: &amp;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;, n2: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;, p2: &amp;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return point <code>q</code> such that <code>q=n1.p1+n2.p2</code> where <code>n1</code> and <code>n2</code> are
+scalar values and <code>p1</code> and <code>p2</code> are group elements. Note that the
+values of <code>n1</code> and <code>n2</code> are not clamped by this method before their
+multiplications.</p>
+</div><h4 id='method.keypair' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.keypair' class='fnname'>keypair</a>() -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;, <a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;)</a></code></h4>
+<div class='docblock'><p>Generate keypair <code>(pk, sk)</code> such that <code>pk=sk.BP</code> with secret scalar
+<code>sk</code> appropriately clamped and <code>pk</code> is the resulting public key.</p>
+</div><h4 id='method.to_mont' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.to_mont' class='fnname'>to_mont</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/bytes/struct.MontPoint.html' title='crypto::curve41417::bytes::MontPoint'>MontPoint</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Convert this point Edwards coordinates to Montgomery&#39;s
+x-coordinate. This result may be used as input point in
+<code>curve41417::mont</code> scalar multiplications.</p>
+</div><h4 id='method.elligator_to_representation' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.elligator_to_representation' class='fnname'>elligator_to_representation</a>(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;&gt;</code></h4>
+<div class='docblock'><p>Use <a href="http://elligator.cr.yp.to/">Elligator</a> to encode a curve
+point to a byte-string representation.</p>
+</div><h4 id='method.elligator_from_representation' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.elligator_from_representation' class='fnname'>elligator_from_representation</a>(r: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Elligator.html' title='crypto::curve41417::bytes::Elligator'>Elligator</a>&lt;A&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;&gt;</code></h4>
+<div class='docblock'><p>Map a byte-string representation to a curve point. Return a valid
+group element if it produces to a well-defined point.</p>
+
+<p>The argument provided to this method is expected to originate from
+the encoded representation returned by
+<code>elligator_to_representation()</code>.</p>
+</div><h4 id='method.elligator_from_bytes' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.elligator_from_bytes' class='fnname'>elligator_from_bytes</a>&lt;T: <a class='trait' href='../../../crypto/curve41417/bytes/trait.Bytes.html' title='crypto::curve41417::bytes::Bytes'>Bytes</a> + <a class='trait' href='../../../crypto/curve41417/bytes/trait.Reducible.html' title='crypto::curve41417::bytes::Reducible'>Reducible</a>&gt;(s: &amp;T) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;&gt;</code></h4>
+<div class='docblock'><p>Map a byte-string to a curve point. Return a valid group element
+if <code>s</code> produces to a well-defined point. The provided input is
+first reduced in <code>Fq</code>. For better uniformity of the distribution
+in <code>Fq</code> the input must be sufficiently large.</p>
+
+<p>Note that since <code>ψ(r) = ψ(-r)</code> with <code>ψ</code> the mapping function and
+<code>r = s mod q</code>, as <code>r</code> and <code>-r</code> map to the same point, it may lead
+to obtain a non unique result for
+<code>elligator_to_representation(elligator_from_bytes(s))</code> in <code>{r, -r}</code>.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Add.html' title='core::ops::Add'>Add</a>&lt;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;, <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.add' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.add' class='fnname'>add</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Add points.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Sub.html' title='core::ops::Sub'>Sub</a>&lt;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;, <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.sub' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.sub' class='fnname'>sub</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Subtract points.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Neg.html' title='core::ops::Neg'>Neg</a>&lt;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.neg' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.neg' class='fnname'>neg</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Negate point.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Mul.html' title='core::ops::Mul'>Mul</a>&lt;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;, <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.mul' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.mul' class='fnname'>mul</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Multiply point <code>self</code> with scalar value <code>other</code>. Note that
+currently it is not possible to symmetrically overload the <code>*</code>
+operator of a scalar value to support <code>scalar * point</code> when
+<code>point</code> is a <code>GroupElem</code>.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.drop' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Before being released point&#39;s coordinates are zeroed-out.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.clone' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<h4 id='method.clone_from' class='method'><a class='stability Experimental' title='Experimental: this function is mostly unused'></a><code>fn <a href='#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, &amp;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.default' class='method'><a class='stability Stable' title='Stable'></a><code>fn <a href='#method.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>By default return the neutral point.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.fmt' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>, <a class='enum' href='http://doc.rust-lang.org/nightly/core/fmt/enum.FormatError.html' title='core::fmt::FormatError'>FormatError</a>&gt;</code></h4>
+<div class='docblock'><p>Format as hex-string.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/hex/trait.ToHex.html' title='serialize::hex::ToHex'>ToHex</a> for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.to_hex' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.to_hex' class='fnname'>to_hex</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Constant-time points equality comparison.</p>
+</div><h4 id='method.ne' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.ne' class='fnname'>ne</a>(&amp;self, &amp;<a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../../crypto/curve41417/ed/struct.GroupElem.html' title='crypto::curve41417::ed::GroupElem'>GroupElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.assert_receiver_is_total_eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.assert_receiver_is_total_eq' class='fnname'>assert_receiver_is_total_eq</a>(&amp;self)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "crypto";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    
+    <script async src="../../../search-index.js"></script>
+</body>
+</html>

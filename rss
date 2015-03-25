@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<rss version="2.0"><channel><title>Sebastien Martini's blog</title><link>http://seb.dbzteam.org/blog/</link><description></description><lastBuildDate>Thu, 29 Jan 2015 14:58:31 GMT</lastBuildDate><generator>PyRSS2Gen-1.0.0</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>&amp;rarr; Bay Area Rust Meetup on Crypto
+</title><link>https://air.mozilla.org/bay-area-rust-meetup-december-2014/
+</link><description>&lt;p&gt;Two days ago I've given a talk about &lt;a href="/crypto/rust-meetup-122014-tars.pdf"&gt;memory protections and crypto data&lt;/a&gt; at the &lt;a href="https://air.mozilla.org/bay-area-rust-meetup-december-2014/"&gt;Bay Area Rust Meetup&lt;/a&gt; held by Mozilla San Francisco and dedicated to the topic of cryptography. The corresponding project I created is also available on Github as project &lt;a href="https://github.com/seb-m/tars"&gt;TARS&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This whole meetup was filled with great talks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://speakerdeck.com/tarcieri/thoughts-on-rust-cryptography"&gt;Thoughts on Rust Cryptography&lt;/a&gt;, by &lt;a href="https://twitter.com/bascule"&gt;Tony Arcieri&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Crypto Interface Pitfalls (and how to avoid them)&lt;/em&gt;, by &lt;a href="https://twitter.com/spdevlin"&gt;Sean Devlin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.google.com/presentation/d/1AOTxnpYz_ibwrrfF7j6yjWqQrb0TaCQre68jrLdj_Ec/edit#slide=id.p"&gt;Using Linux Kernel crypto APIs from Rust&lt;/a&gt;, by &lt;a href="https://twitter.com/mcpherrinm"&gt;Matthew McPherrin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://huonw.github.io/rand-dec14/slides.pdf"&gt;std::rand::random::&amp;lt;Talk&amp;gt;()&lt;/a&gt;, by &lt;a href="https://github.com/huonw"&gt;Huon Wilson&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2014/12/20/rust_meetup_crypto_tars.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Sat, 20 Dec 2014 00:00:00 GMT</pubDate></item><item><title>Arithmetic Bug in TweetNaCl
+</title><link>http://seb.dbzteam.org/blog/2014/04/28/tweetnacl_arithmetic_bug.html</link><description>&lt;p&gt;This is the description of an arithmetic bug I found&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; in one of the operations used during the computations of &lt;a href="http://en.wikipedia.org/wiki/Curve25519"&gt;Curve25519&lt;/a&gt; scalar multiplications in the &lt;a href="http://tweetnacl.cr.yp.to/index.html"&gt;TweetNaCl library&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The culprit is the code handling the final reduction modulo 2&lt;sup&gt;255&lt;/sup&gt; - 19 located in the function &lt;code&gt;pack25519()&lt;/code&gt;. The following snippet presents the &lt;a href="http://tweetnacl.cr.yp.to/20131229/tweetnacl.c"&gt;original code&lt;/a&gt; &lt;em&gt;(version 20131229)&lt;/em&gt; of this function:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;&lt;span class="n"&gt;sv&lt;/span&gt; &lt;span class="nf"&gt;pack25519&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;u8&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;gf&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="n"&gt;gf&lt;/span&gt; &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="n"&gt;FOR&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+  &lt;span class="n"&gt;car25519&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="n"&gt;car25519&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="n"&gt;car25519&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="n"&gt;FOR&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mh"&gt;0xffed&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mh"&gt;0xffff&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;=&lt;/span&gt;&lt;span class="mh"&gt;0xffff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mh"&gt;0x7fff&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;14&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="hll"&gt;    &lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;=&lt;/span&gt;&lt;span class="mh"&gt;0xffff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/span&gt;    &lt;span class="n"&gt;sel25519&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="n"&gt;FOR&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="mh"&gt;0xff&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This bug is triggered when the last limb &lt;code&gt;n[15]&lt;/code&gt; of the input argument &lt;code&gt;n&lt;/code&gt; of this function is greater or equal than &lt;code&gt;0xffff&lt;/code&gt;. In these cases the result of the scalar multiplication is not reduced as expected resulting in a wrong packed value. This code can be fixed simply by replacing &lt;code&gt;m[15]&amp;amp;=0xffff;&lt;/code&gt; by &lt;code&gt;m[14]&amp;amp;=0xffff;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Examples triggering this error are easy to generate. For instance, here is a case where a carefully selected&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt; scalar &lt;code&gt;n&lt;/code&gt; when multiplied with the base point &lt;code&gt;(9, y)&lt;/code&gt; in the Montgomery curve representation and using TweetNaCl's &lt;code&gt;scalarmult_base()&lt;/code&gt; function outputs a wrong result:&lt;/p&gt;
+&lt;div class="codehilite"&gt;&lt;pre&gt;Scalar value n:
+ 76f6507a08e5d77a9a7b316d93cbb59b
+ afa2e13d1f84d181a35779e7fc471d19
+
+Wrong result obtained from bugged scalarmult_base(n) in pack25519():
+ 829253d8647cd88e3fb76358cfef0a91
+ 51aa8e7189fb6326dfb0603f6bff0000
+
+Expected result obtained from ref implementation:
+ 6f9253d8647cd88e3fb76358cfef0a91
+ 51aa8e7189fb6326dfb0603f6bffff7f
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This error should be relatively frequent, it happens around or a bit less than one time for every 2&lt;sup&gt;16&lt;/sup&gt; computations for computations with different scalar values or different points. However, beyond the wrongness of the resulting x-coordinate&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3" rel="footnote"&gt;3&lt;/a&gt;&lt;/sup&gt;, and because this error happens at the end of computations steps there is no risk it could lead to greater damages like for instance revealing bits of user's secret. So just update your code with the &lt;a href="http://tweetnacl.cr.yp.to/software.html"&gt;new version&lt;/a&gt; &lt;em&gt;(20140427)&lt;/em&gt; and you'll be fine.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Bug reported on 02-13-2014 to its authors.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;This example was generated with &lt;a href="/crypto/tweetnacl_bug.c"&gt;this code&lt;/a&gt;.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;This bug is not limited to DH computations it should also affect the signature operations of EdDSA.&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" rev="footnote" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2014/04/28/tweetnacl_arithmetic_bug.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Mon, 28 Apr 2014 00:00:00 GMT</pubDate></item><item><title>Authenticated Encryption in 2014
+</title><link>http://seb.dbzteam.org/blog/2014/03/22/authenticated_encryption_in_2014.html</link><description>&lt;p&gt;I see two main use cases: one where relatively short messages or packets are encrypted and another one where files of any size could be encrypted. As the title of this post implies I deliberately ignore&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1" rel="footnote"&gt;1&lt;/a&gt;&lt;/sup&gt; the recent &lt;a href="http://competitions.cr.yp.to/caesar-submissions.html"&gt;AEAD submissions&lt;/a&gt; made in the &lt;a href="http://competitions.cr.yp.to/"&gt;CAESAR competition&lt;/a&gt; as the process will not be achieved this year. Currently what I think are the most interesting schemes for encrypting and authenticating for these two uses cases:&lt;/p&gt;
+&lt;p&gt;In a messages scenario you could either use the &lt;a href="http://nacl.cr.yp.to/secretbox.html"&gt;crypto_secretbox()&lt;/a&gt; function implemented in &lt;a href="http://nacl.cr.yp.to/"&gt;NaCl&lt;/a&gt;, it is based on &lt;a href="http://cr.yp.to/snuffle.html"&gt;Salsa20&lt;/a&gt; for encryption and &lt;a href="http://cr.yp.to/mac.html"&gt;Poly1305&lt;/a&gt; for authentication, or you could use &lt;a href="http://cr.yp.to/chacha.html"&gt;ChaCha20&lt;/a&gt; for encryption again combined with Poly1305 as it is &lt;a href="http://tools.ietf.org/html/draft-nir-cfrg-chacha20-poly1305-01"&gt;currently specified&lt;/a&gt; for &lt;a href="http://tools.ietf.org/html/draft-mavrogiannopoulos-chacha-tls-02"&gt;inclusion in SSL/TLS&lt;/a&gt;&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2" rel="footnote"&gt;2&lt;/a&gt;&lt;/sup&gt;. Assuming your protocol uses as expected deterministic nonces and somehow split messages in packets in another layer of your application thus not having to encrypt multi-terabytes files, both schemes are equally fines. The only distinction I would make is that &lt;em&gt;crypto_secretbox()&lt;/em&gt; is more tunnel-oriented (or end-to-end) in the sense that as it doesn't provide additional data authentication, you would use it in a context where everything must be encrypted. Whereas the second scheme is a bit more versatile it can mix authenticated plaintext with encrypted-then-authenticated data.&lt;/p&gt;
+&lt;p&gt;In a file encryption scenario &lt;em&gt;crypto_secretbox()&lt;/em&gt; is more adapted as it is based on XSalsa meaning that it accepts larger nonces than a pure Salsa or ChaCha version. Therefore it may safely uses random nonces for encryption while keeping 64 bits internally as counter which is large enough to virtually encrypt files up to 2&lt;sup&gt;70&lt;/sup&gt; bytes. Moreover in this context there is usually no need for authentication of additional data so the lack of this feature in &lt;em&gt;crypto_secretbox()&lt;/em&gt; is not a limitation in this case.  The scheme based on ChaCha on the other end is not a good fit, it is not conceived for that purpose, it can't use random nonces and its size of ciphertext is limited to 2&lt;sup&gt;38&lt;/sup&gt; bytes.&lt;/p&gt;
+&lt;p&gt;However for both there is a bigger problem that may prevent them to be used in encrypting large files as their interfaces require that all the data to fit in memory before starting encryption/decryption. Actually stateful encryption and decryption present an important challenge for doing it securely and efficiently in &lt;em&gt;encrypt-then-mac&lt;/em&gt; schemes, especially for decryption because you'd want to only let the caller access the plaintext data once the ciphertext has been fully authenticated while at the same time you'd want to buffer the decryption in order to alleviate the memory footprint. Of course you could authenticate and decrypt in two separate passes but in this case it wouldn't be very efficient. So, for now there is no perfect solution for this use case.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;I also choose not to consider schemes such as AES-CCM and AES-GCM as they'd also introduce other problems and considerations.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;OpenSSH already &lt;a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/PROTOCOL.chacha20poly1305?rev=HEAD;content-type=text%2Fplain"&gt;implements a variant&lt;/a&gt; and it should also be available in the near future as a new &lt;a href="https://chromium.googlesource.com/chromium/deps/openssl/+/master/openssl/crypto/evp/e_chacha20poly1305.c"&gt;EVP_AEAD cipher&lt;/a&gt; in OpenSSL.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2014/03/22/authenticated_encryption_in_2014.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Sat, 22 Mar 2014 00:00:00 GMT</pubDate></item><item><title>The Verification Problem Introduced by Highly Specialized Cryptographic Implementations
+</title><link>http://seb.dbzteam.org/blog/2014/01/11/specialized_crypto_implementations.html</link><description>&lt;p&gt;As cryptographic implementations naturally strive for better and better performances it's actually very common to see generic implementations dropped in favor of highly specialized ones. Therefore, there's often a dedicated implementation not only for any single family of crypto algorithm but also for any single combination of parameters and cpu architectures. The obvious downside is this could easily result in large code bases difficult to verify and audit.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://tweetnacl.cr.yp.to/"&gt;TweetNaCl&lt;/a&gt; &amp;ndash; a compact implementation of &lt;a href="http://nacl.cr.yp.to/"&gt;NaCl&lt;/a&gt; &amp;ndash; developped by Bernstein et al. &lt;a href="http://tweetnacl.cr.yp.to/tweetnacl-20131229.pdf"&gt;discusses the challenges&lt;/a&gt; introduced by these specialized cryptographic implementations:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;However, NaCl&#8217;s performance comes at a price. A single NaCl function usually consists of several different implementations, often including multiple assembly-language implementations optimized for different CPUs. NaCl&#8217;s compilation system is correspondingly complicated. Auditing the NaCl source is a time-consuming job. For example, four implementations of the ed25519 signature system have been publicly available and waiting for integration into NaCl since 2011, but in total they consist of 5521 lines of C code and 16184 lines of qhasm code.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Highlighting a bug found in the relatively large amount of code implementing operations on Edwards curves such as point addition.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Partial audits have revealed a bug in this software (r1 += 0 + carry should be r2 += 0 + carry in amd64-64-24k) that would not be caught by random tests; this illustrates the importance of audits. There has been some progress towards computer verification of formal proofs of correctness of software, but this progress is still far from complete verification of a usable high-security cryptographic library.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2014/01/11/specialized_crypto_implementations.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Sat, 11 Jan 2014 00:00:00 GMT</pubDate></item><item><title>&amp;rarr; Ed25519 for Authentication in OpenSSH
+</title><link>http://lists.mindrot.org/pipermail/openssh-unix-dev/2013-December/031871.html
+</link><description>&lt;p&gt;The support for the Ed25519 signature scheme has recently been committed to OpenSSH and it relies on the SUPERCOP implementation. Damien Miller:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Markus has just committed a few changes that add support for the &lt;a href="http://ed25519.cr.yp.to/ed25519-20110926.pdf"&gt;Ed25519
+signature algorithm&lt;/a&gt; as a new private key type.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I'm not holding my breath for a quick implementation of Ed25519 &lt;a href="/blog/2013/12/18/openssl_removed_from_openssh_on_osx.html"&gt;in Common Crypto&lt;/a&gt; though.&lt;/p&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2013/12/26/ed25519_for_authentication_in_openssh.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Thu, 26 Dec 2013 00:00:00 GMT</pubDate></item><item><title>OpenSSL stripped-out from OpenSSH on OS X
+</title><link>http://seb.dbzteam.org/blog/2013/12/18/openssl_removed_from_openssh_on_osx.html</link><description>&lt;p&gt;The current situation of the crypto implementation of OpenSSH &lt;a href="http://opensource.apple.com/source/OpenSSH/OpenSSH-186/"&gt;as shipped by Apple in OS X 10.9&lt;/a&gt; is a real mess. Continuing their push in favor of &lt;a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man3/Common%20Crypto.3cc.html"&gt;Common Crypto&lt;/a&gt; and their deprecating of libcrypto (OpenSSL) they implemented in their version of OpenSSH a &lt;a href="http://opensource.apple.com/source/OpenSSH/OpenSSH-186/osslshim/ossl/"&gt;new crypto module&lt;/a&gt; compatible with OpenSSL's interface but targetting the Common Crypto library instead. However this implementation seems currently incomplete due to limitations of Common Crypto and as a result they also have embedded fallbacks on big chunks of OpenSSL code.&lt;/p&gt;
+&lt;p&gt;A concrete shortcoming is that there is actually no elliptic curve support, thus it is not possible to generate EC keys and use ECDSA signatures for authentication.&lt;/p&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2013/12/18/openssl_removed_from_openssh_on_osx.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Wed, 18 Dec 2013 00:00:00 GMT</pubDate></item><item><title>SPAKE2 implementation in Chrome
+</title><link>http://seb.dbzteam.org/blog/2013/12/05/spake2_in_chrome.html</link><description>&lt;p&gt;The Chrome browser provides an implementation (&lt;a href="http://src.chromium.org/viewvc/chrome/trunk/src/crypto/p224_spake.h"&gt;p224_spake.h&lt;/a&gt;, &lt;a href="http://src.chromium.org/viewvc/chrome/trunk/src/crypto/p224_spake.cc"&gt;p224_spake.cc&lt;/a&gt;) for the password-based encrypted key exchange protocol &lt;a href="http://www.di.ens.fr/~abdalla/papers/AbPo05a-letter.pdf"&gt;SPAKE2&lt;/a&gt;. This code is implemented in C++ and its operations are based over the elliptic group NIST P-224, using their standalone implementation (&lt;a href="http://src.chromium.org/viewvc/chrome/trunk/src/crypto/p224.h"&gt;p224.h&lt;/a&gt;, &lt;a href="http://src.chromium.org/viewvc/chrome/trunk/src/crypto/p224.cc"&gt;p224.cc&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Note: In the SPAKE protocols it is vitally important to either validate the public points used to mask the password or to use as they do in this implementation hard-coded static points with verifiable non-random seeds.&lt;/p&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2013/12/05/spake2_in_chrome.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Thu, 05 Dec 2013 00:00:00 GMT</pubDate></item><item><title>Salsa vs ChaCha in TLS
+</title><link>http://seb.dbzteam.org/blog/2013/11/30/salsa_vs_chacha.html</link><description>&lt;p&gt;From this &lt;a href="http://www.ietf.org/mail-archive/web/tls/current/threads.html#10630"&gt;thread&lt;/a&gt;, what seems to be the main &lt;a href="http://www.ietf.org/mail-archive/web/tls/current/msg10725.html"&gt;opposing argument&lt;/a&gt; against the choice of ChaCha as new cipher in TLS is that Salsa20 presents the advantage of already being standardized in the &lt;a href="http://www.ecrypt.eu.org/stream/"&gt;eSTREAM portfolio&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2013/11/30/salsa_vs_chacha.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Sat, 30 Nov 2013 00:00:00 GMT</pubDate></item><item><title>&amp;rarr; Twitter's TLS Forward Secrecy Implementation
+</title><link>https://blog.twitter.com/2013/forward-secrecy-at-twitter-0
+</link><description>&lt;p&gt;Jacob Hoffman-Andrews detailing Twitter's TLS session tickets implementation for session resumption with forward secrecy:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We have a set of key generator machines, of which one is the leader. The leader generates a fresh session ticket key every twelve hours and zeroes old keys after thirty-six hours. Keys are stored in tmpfs (a RAM-based filesystem), with no swap partitions configured. It's important that there be no swap, because tmpfs will use swap if available, which could write keys to long-term disk storage.&lt;/p&gt;
+&lt;p&gt;Every five minutes, our frontends fetch the latest ticket keys from a key generator machine via SSH.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2013/11/23/twitter_tls_forward_secrecy.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Sat, 23 Nov 2013 00:00:00 GMT</pubDate></item><item><title>&amp;rarr; ECC 2013 summer school on Elliptic and Hyperelliptic Curve Cryptography
+</title><link>https://www.cosic.esat.kuleuven.be/ecc2013/summer_school.shtml
+</link><description>&lt;blockquote&gt;
+&lt;p&gt;The course is intended for graduate students in cryptography and mathematics. Introductory topics on elliptic curves and cryptographic applications will be covered, with an emphasis on providing a strong background in support of the research talks at ECC.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Slides are available online and it's very good, it covers the main fields related to EC.&lt;/p&gt;
+&lt;p&gt;And, don't miss the &lt;em&gt;rule 34 of crypto&lt;/em&gt; from the &lt;a href="https://www.cosic.esat.kuleuven.be/ecc2013/files/pierrick_gaudry_2.pdf"&gt;lecture on pairings&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Rule 34&lt;/strong&gt; of crypto. If you can think of a crypto scenario, there is already a pairing-based article about it.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2013/11/23/ecc2013_summer_school.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Sat, 23 Nov 2013 00:00:00 GMT</pubDate></item><item><title>Bootstrapping...
+</title><link>http://seb.dbzteam.org/blog/2013/11/22/boostrapping.html</link><description>&lt;p&gt;Initial post.&lt;/p&gt;
+
+&lt;div&gt;
+  &lt;p&gt;&lt;a title="Permalink" href="/0d//blog/2013/11/22/boostrapping.html"&gt;&amp;infin; Permalink&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><pubDate>Fri, 22 Nov 2013 00:00:00 GMT</pubDate></item></channel></rss>

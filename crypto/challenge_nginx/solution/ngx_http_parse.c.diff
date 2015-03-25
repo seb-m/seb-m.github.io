@@ -1,0 +1,13 @@
+--- ngx_http_parse.c.orig	2011-01-25 05:11:18.157809998 +0100
++++ ngx_http_parse.c	2011-01-25 05:11:35.225810002 +0100
+@@ -1247,9 +1247,7 @@
+                     ch = *p++;
+                     break;
+ 
+-                } else if (ch == '\0') {
+-                    return NGX_HTTP_PARSE_INVALID_REQUEST;
+-                  }
++                }
+ 
+                 state = quoted_state;
+                 break;

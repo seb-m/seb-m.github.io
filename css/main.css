@@ -1,0 +1,179 @@
+/* Chunks are shamelessly copied from Boostrap's documentation */
+
+
+body {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 50px; /* Account for fixed navbar */
+  color: rgb(64, 64, 64);
+  font-size: 13px;
+  background-color: #f1f1f1;
+  text-rendering: optimizelegibility;
+}
+
+.bs-docs-nav {
+  background-color: #f1f1f1;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+/* Custom classes */
+
+.main-content {
+  margin-bottom: 75px;
+}
+
+.entry {
+  margin-bottom: 100px;
+}
+
+.entry_content {
+  margin-top: 15px;
+}
+
+.resume {
+  font-size: 14px;
+}
+
+.resume ul {
+  list-style: square outside none;
+}
+
+
+/* Overridings */
+@media (min-width: 768px) {
+  .container {
+    width: 650px;
+  }
+
+  .container.content-streched {
+    width: 750px;
+  }
+
+  .sd-title {
+    display: none;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 650px;
+  }
+
+  .container.content-streched {
+    width: 750px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 650px;
+  }
+
+  .container.content-streched {
+    width: 750px;
+  }
+}
+
+.navbar-brand {
+  font-size: 15px;
+}
+
+
+/* Elements style */
+a {
+  color: rgb(1, 122, 255);  /* blue iOS 7 */
+}
+
+h1, h2, h3, h4, h5, h6, a.noext {
+  color: rgb(64, 64, 64);
+}
+
+h1,
+.h1 {
+  font-size: 24px;
+}
+
+h2,
+.h2 {
+  font-size: 19px;
+}
+
+h3,
+.h3 {
+  font-size: 17px;
+}
+
+h4,
+.h4 {
+  font-size: 14px;
+}
+
+h5,
+.h5 {
+  font-size: 12px;
+}
+
+h6,
+.h6 {
+  font-size: 11px;
+}
+
+pre,
+.pre,
+code,
+.code {
+  font-size: 13px;
+  overflow: auto;
+  word-wrap: normal;
+  /*white-space: pre;*/
+}
+
+blockquote {
+  padding: 4px 10px;
+  margin: 0 0 10px;
+  border-left: 2px solid rgb(1, 140, 255); /* gray: #848482 */
+}
+
+blockquote,
+.blockquote,
+blockquote p,
+.blockquote p {
+  font-size: 13px;
+  line-height: 1.3em;
+}
+
+
+/* Navigation bar */
+.navbar .nav > li > a,
+.navbar .nav > li > a:visited {
+  color: rgb(64, 64, 64); /* dark gray */
+}
+
+.navbar .nav > li > a:hover {
+  color: rgb(1, 122, 255);  /* blue iOS 7 */
+}
+
+.navbar .nav > li.active > a,
+.navbar .nav > li.active > a:hover,
+.navbar .nav > li.active > a:focus,
+.navbar .nav > li.active > a:visited {
+  background-color: #f1f1f1;
+  color: rgb(153, 153, 153); /* light gray */
+}
+
+.navbar {
+  border-color: rgb(229, 229, 229); /* light gray */
+}
+
+.navbar-inverse .navbar-toggle,
+.navbar-inverse .navbar-toggle:hover,
+.navbar-inverse .navbar-toggle:focus {
+  background-color:  rgb(1, 122, 255);
+  border-color:  rgb(1, 122, 255);
+}
+
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  color: rgb(153, 153, 153);
+}

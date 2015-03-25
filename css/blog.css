@@ -1,0 +1,40 @@
+/* Blog */
+
+.entry_content {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.45em;
+  word-wrap: break-word;
+}
+
+.entry_content p {
+  margin-bottom: 1.0em;
+}
+
+blockquote,
+.blockquote,
+blockquote p,
+.blockquote p {
+  font-size: 14px;
+  line-height: 1.35em;
+  font-weight: 400;
+}
+
+h2,
+.h2 {
+  font-size: 22px;
+}
+
+.footnote {
+  font-size: 13px;
+  line-height: 1.25em;
+}
+
+.footnote, .footnote hr, .footnote ol, .footnote li {
+  margin: 0px;
+  padding: 0px;
+}
+
+.footnote ol {
+  margin: 10px 20px 10px 20px;
+}

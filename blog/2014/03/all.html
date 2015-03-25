@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>
+Blog
+</title>
+
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/pygments.css" rel="stylesheet">
+    <link href="/css/blog.css" rel="stylesheet">
+    
+    
+  </head>
+  <body>
+    
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <span class="navbar-brand">March 2014</span>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/archives.html">Archives</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    
+    <div class="container">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+        
+        <div class="entry">
+	  
+          <h2><a href="/blog/2014/03/22/authenticated_encryption_in_2014.html" class="noext">Authenticated Encryption in 2014
+</a></h2>
+	  
+          <h6><span class="pubdate">22 March 2014</span> <a class="permalink" title="Permalink" href="/blog/2014/03/22/authenticated_encryption_in_2014.html">&infin;</a></h6>
+
+          <div class="entry_content">
+            <p>I see two main use cases: one where relatively short messages or packets are encrypted and another one where files of any size could be encrypted. As the title of this post implies I deliberately ignore<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup> the recent <a href="http://competitions.cr.yp.to/caesar-submissions.html">AEAD submissions</a> made in the <a href="http://competitions.cr.yp.to/">CAESAR competition</a> as the process will not be achieved this year. Currently what I think are the most interesting schemes for encrypting and authenticating for these two uses cases:</p>
+<p>In a messages scenario you could either use the <a href="http://nacl.cr.yp.to/secretbox.html">crypto_secretbox()</a> function implemented in <a href="http://nacl.cr.yp.to/">NaCl</a>, it is based on <a href="http://cr.yp.to/snuffle.html">Salsa20</a> for encryption and <a href="http://cr.yp.to/mac.html">Poly1305</a> for authentication, or you could use <a href="http://cr.yp.to/chacha.html">ChaCha20</a> for encryption again combined with Poly1305 as it is <a href="http://tools.ietf.org/html/draft-nir-cfrg-chacha20-poly1305-01">currently specified</a> for <a href="http://tools.ietf.org/html/draft-mavrogiannopoulos-chacha-tls-02">inclusion in SSL/TLS</a><sup id="fnref:2"><a class="footnote-ref" href="#fn:2" rel="footnote">2</a></sup>. Assuming your protocol uses as expected deterministic nonces and somehow split messages in packets in another layer of your application thus not having to encrypt multi-terabytes files, both schemes are equally fines. The only distinction I would make is that <em>crypto_secretbox()</em> is more tunnel-oriented (or end-to-end) in the sense that as it doesn't provide additional data authentication, you would use it in a context where everything must be encrypted. Whereas the second scheme is a bit more versatile it can mix authenticated plaintext with encrypted-then-authenticated data.</p>
+<p>In a file encryption scenario <em>crypto_secretbox()</em> is more adapted as it is based on XSalsa meaning that it accepts larger nonces than a pure Salsa or ChaCha version. Therefore it may safely uses random nonces for encryption while keeping 64 bits internally as counter which is large enough to virtually encrypt files up to 2<sup>70</sup> bytes. Moreover in this context there is usually no need for authentication of additional data so the lack of this feature in <em>crypto_secretbox()</em> is not a limitation in this case.  The scheme based on ChaCha on the other end is not a good fit, it is not conceived for that purpose, it can't use random nonces and its size of ciphertext is limited to 2<sup>38</sup> bytes.</p>
+<p>However for both there is a bigger problem that may prevent them to be used in encrypting large files as their interfaces require that all the data to fit in memory before starting encryption/decryption. Actually stateful encryption and decryption present an important challenge for doing it securely and efficiently in <em>encrypt-then-mac</em> schemes, especially for decryption because you'd want to only let the caller access the plaintext data once the ciphertext has been fully authenticated while at the same time you'd want to buffer the decryption in order to alleviate the memory footprint. Of course you could authenticate and decrypt in two separate passes but in this case it wouldn't be very efficient. So, for now there is no perfect solution for this use case.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>I also choose not to consider schemes such as AES-CCM and AES-GCM as they'd also introduce other problems and considerations.&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>OpenSSH already <a href="http://www.openbsd.org/cgi-bin/cvsweb/src/usr.bin/ssh/PROTOCOL.chacha20poly1305?rev=HEAD;content-type=text%2Fplain">implements a variant</a> and it should also be available in the near future as a new <a href="https://chromium.googlesource.com/chromium/deps/openssl/+/master/openssl/crypto/evp/e_chacha20poly1305.c">EVP_AEAD cipher</a> in OpenSSL.&#160;<a class="footnote-backref" href="#fnref:2" rev="footnote" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+          </div>
+        </div> <!-- entry -->
+        
+      </div> <!-- layout -->
+    </div> <!-- container -->
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

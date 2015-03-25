@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ScalarElem` struct in crate `crypto`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ScalarElem">
+
+    <title>crypto::curve41417::sc::ScalarElem - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+
+    <link rel="shortcut icon" href="http://www.rust-lang.org/favicon.ico">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        <a href='../../../crypto/index.html'><img src='http://www.rust-lang.org/logos/rust-logo-128x128-blk.png' alt='' width='100'></a>
+        <p class='location'><a href='../../index.html'>crypto</a>::<wbr><a href='../index.html'>curve41417</a>::<wbr><a href='index.html'>sc</a></p><div class='block struct'><h2>Structs</h2><a class='struct current' href='struct.ScalarElem.html'>ScalarElem</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>crypto</a>::<wbr><a href='../index.html'>curve41417</a>::<wbr><a href='index.html'>sc</a>::<wbr><a class='struct' href=''>ScalarElem</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-7822' href='http://doc.rust-lang.org/curve41417/sc/struct.ScalarElem.html?gotosrc=7822'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct ScalarElem&lt;A = <a class='struct' href='../../../crypto/sbuf/struct.GuardedHeapAllocator.html' title='crypto::sbuf::GuardedHeapAllocator'>GuardedHeapAllocator</a>&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>Scalar element used in scalar operations.</p>
+
+<p>Provide commons Curve41417 scalar operations computed <code>mod L</code>, where
+<code>L</code> is the prime order of the base point <code>ed::base()</code> currently used.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.new_rand' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.new_rand' class='fnname'>new_rand</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Generate a new random <code>ScalarElem</code> between <code>[0, L-1]</code>.
+Use <code>urandom</code> as PRNG.</p>
+</div><h4 id='method.zero' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.zero' class='fnname'>zero</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return scalar value representing <code>0</code>.</p>
+</div><h4 id='method.len' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.len' class='fnname'>len</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a></code></h4>
+<h4 id='method.unpack' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.unpack' class='fnname'>unpack</a>(n: &amp;<a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<div class='docblock'><p>Unpack scalar value <code>n</code>. It must represent a value strictly in
+<code>[0, L-1]</code> and it should not be expected to be reduced on unpacking.</p>
+</div><h4 id='method.unpack_from_bytes' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.unpack_from_bytes' class='fnname'>unpack_from_bytes</a>&lt;T: <a class='trait' href='../../../crypto/curve41417/bytes/trait.Bytes.html' title='crypto::curve41417::bytes::Bytes'>Bytes</a> + <a class='trait' href='../../../crypto/curve41417/bytes/trait.Reducible.html' title='crypto::curve41417::bytes::Reducible'>Reducible</a>&gt;(b: &amp;T) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<div class='docblock'><p>Unpack bytes <code>b</code> as a scalar and reduce it <code>mod L</code>. Note that <code>B832</code>
+instances might provide a better uniformity of distribution on
+reductions <code>mod L</code>.</p>
+</div><h4 id='method.pack' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.pack' class='fnname'>pack</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Pack the current scalar value reduced <code>mod L</code>. It is not until
+this method is called that the scalar element is reduced to its
+canonical form.</p>
+</div><h4 id='method.reduce_from_bytes' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.reduce_from_bytes' class='fnname'>reduce_from_bytes</a>&lt;T: <a class='trait' href='../../../crypto/curve41417/bytes/trait.Bytes.html' title='crypto::curve41417::bytes::Bytes'>Bytes</a> + <a class='trait' href='../../../crypto/curve41417/bytes/trait.Reducible.html' title='crypto::curve41417::bytes::Reducible'>Reducible</a>&gt;(b: &amp;T) -&gt; <a class='struct' href='../../../crypto/curve41417/bytes/struct.Scalar.html' title='crypto::curve41417::bytes::Scalar'>Scalar</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Unpack bytes <code>b</code> as a scalar, reduce it <code>mod L</code> and return the packed
+reduced result.</p>
+</div><h4 id='method.is_zero' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.is_zero' class='fnname'>is_zero</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Check if <code>self</code> is equal to <code>0</code>.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.clone' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<h4 id='method.clone_from' class='method'><a class='stability Experimental' title='Experimental: this function is mostly unused'></a><code>fn <a href='#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, &amp;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Index.html' title='core::ops::Index'>Index</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>&gt; for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.index' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.index' class='fnname'>index</a>(&amp;self, index: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.IndexMut.html' title='core::ops::IndexMut'>IndexMut</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>&gt; for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.index_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.index_mut' class='fnname'>index_mut</a>(&amp;mut self, index: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;mut <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Add.html' title='core::ops::Add'>Add</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;, <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.add' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.add' class='fnname'>add</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Add scalars.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Sub.html' title='core::ops::Sub'>Sub</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;, <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.sub' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.sub' class='fnname'>sub</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Substract scalars.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Neg.html' title='core::ops::Neg'>Neg</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.neg' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.neg' class='fnname'>neg</a>(&amp;self) -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Negate scalar.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Mul.html' title='core::ops::Mul'>Mul</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;, <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt; for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.mul' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.mul' class='fnname'>mul</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;) -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Multiply scalars.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/num/trait.FromPrimitive.html' title='core::num::FromPrimitive'>FromPrimitive</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.from_i64' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_i64' class='fnname'>from_i64</a>(n: <a href='http://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_u64' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_u64' class='fnname'>from_u64</a>(n: <a href='http://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_int' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_int' class='fnname'>from_int</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.int.html'>int</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_i8' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_i8' class='fnname'>from_i8</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_i16' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_i16' class='fnname'>from_i16</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_i32' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_i32' class='fnname'>from_i32</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_uint' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_uint' class='fnname'>from_uint</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_u8' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_u8' class='fnname'>from_u8</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_u16' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_u16' class='fnname'>from_u16</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_u32' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_u32' class='fnname'>from_u32</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_f32' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_f32' class='fnname'>from_f32</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+<h4 id='method.from_f64' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_f64' class='fnname'>from_f64</a>(<a href='http://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/default/trait.Default.html' title='core::default::Default'>Default</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.default' class='method'><a class='stability Stable' title='Stable'></a><code>fn <a href='#method.default' class='fnname'>default</a>() -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Return the scalar value 0 as default.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/rand/trait.Rand.html' title='rand::Rand'>Rand</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.rand' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.rand' class='fnname'>rand</a>&lt;R: <a class='trait' href='http://doc.rust-lang.org/nightly/rand/trait.Rng.html' title='rand::Rng'>Rng</a>&gt;(rng: &amp;mut R) -&gt; <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h4>
+<div class='docblock'><p>Generate a random <code>ScalarElem</code> between <code>[0, L-1]</code>, and its value
+is not clamped. Be sure to use a secure PRNG when calling this
+method. For instance <code>ScalarElem::new_rand()</code> uses urandom.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.fmt' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>, <a class='enum' href='http://doc.rust-lang.org/nightly/core/fmt/enum.FormatError.html' title='core::fmt::FormatError'>FormatError</a>&gt;</code></h4>
+<div class='docblock'><p>Format as hex-string.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/hex/trait.ToHex.html' title='serialize::hex::ToHex'>ToHex</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.to_hex' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.to_hex' class='fnname'>to_hex</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.assert_receiver_is_total_eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.assert_receiver_is_total_eq' class='fnname'>assert_receiver_is_total_eq</a>(&amp;self)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;</code></h3><div class='impl-methods'><h4 id='method.eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Constant-time equality comparison.</p>
+</div><h4 id='method.ne' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.ne' class='fnname'>ne</a>(&amp;self, &amp;<a class='struct' href='../../../crypto/curve41417/sc/struct.ScalarElem.html' title='crypto::curve41417::sc::ScalarElem'>ScalarElem</a>&lt;A&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "crypto";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    
+    <script async src="../../../search-index.js"></script>
+</body>
+</html>

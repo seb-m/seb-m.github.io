@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>Cryptographic attacks against OpenSSL</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+
+    <style type="text/css">
+     li.bottom-space {
+        margin-bottom: 25px;
+     }
+    </style>
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/crypto/" class="navbar-brand">Cryptography</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    <div class="container content-streched main-content">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+      <div class="text-center">
+	<h2>Cryptographic attacks against OpenSSL</h2>
+      </div>
+      <br />
+
+      <div>
+	<p>Although not perfect <a href="http://www.openssl.org/">OpenSSL</a> remains the cryptographic toolkit of reference. It is very well supported, has a steady community and is available on almost all architectures and systems.</p>
+
+	<p>Below is a selected list of several well known cryptographic attacks performed against OpenSSL since 2001 and their associated countermeasures taken in responses. It is worth mentioning that some of these attacks were theoretical or with few concrete incidence, nevertheless the interest here is to study their countermeasures. Obviously most of these attacks were not limited to OpenSSL and also affected others populars cryptographic libraries. However as OpenSSL is one of the most used open source toolkit and because several of these attacks explicitly targeted OpenSSL to present and validate their results it seemed natural and convenient to introduce these attacks from OpenSSL's perspective.</p>
+
+	<p>Some of the following attacks are due to cryptanalytic advances in side-channels attacks: including cache based attacks and timing attacks. Another class of attacks resulted (at least in part) from SSL/TLS protocols flaws or lack of directives in way of handling errors. Weaknesses also affected the quality of generated random keys or parameters.</p>
+      </div>
+
+      <div>
+	<h2>Timeline</h2>
+	<ul>
+	  <a name="Debian_PRNG"></a>
+	  <li>[2008] Predictable random number generator in the Debian's OpenSSL package, found by Luciano Bello.
+	    <ul>
+	      <li><a href="http://lists.debian.org/debian-security-announce/2008/msg00152.html">advisory</a> &ndash; <a href="http://wiki.debian.org/SSLkeys#TechnicalSummary">summary</a> &ndash; <a href="http://svn.debian.org/viewsvn/pkg-openssl/openssl/trunk/rand/md_rand.c?p2=%2Fopenssl%2Ftrunk%2Frand%2Fmd_rand.c&p1=openssl%2Ftrunk%2Frand%2Fmd_rand.c&r1=141&r2=140&view=diff&pathrev=141">incriminated commit</a> &ndash; <a href="http://www.links.org/?p=328">description</a> &ndash; <a href="http://rdist.root.org/2009/05/17/the-debian-pgp-disaster-that-almost-was/">description</a> &ndash; <a href="http://www.cr0.org/progs/sshfun/">tools</a> &ndash; <a href="http://digitaloffense.net/tools/debian-openssl/">tools</a> &ndash; <a href="http://www.lucianobello.com.ar/exploiting_DSA-1571/">tools</a></li>
+            </ul>
+	  </li>
+
+	  <a name="RSA_cache"></a>
+	  <li>[2007] A Vulnerability in RSA Implementations Due to Instruction Cache Analysis and Its Demonstration on OpenSSL by Ac&#305;i&ccedil;mez and Schindler.
+	    <ul>
+	      <li><a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-3108">advisory</a> &ndash; <a href="http://books.google.com/books?id=uatika8-01oC&lpg=PP1&hl=fr&pg=PA256#v=onepage&q=&f=false">paper</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=16275">changes</a></li>
+	      <li>This attack works with an instruction cache analysis aiming at revealing the instruction flow of the Montgomery Modular Multiplication (MMM) algorithm. By default, MMM internally uses two different multiple precision algorithms: a squaring when the inputs are equals, a multiplication otherwise. There are both followed by a Montgomery reduction which may accomplish an additional input-dependent subtraction called Extra Reduction (ER) if the result need to be reduced. This extra conditional step was thought to be safe or at least protected by others mechanisms (see after). However, in their publication the authors show that a spy process can exploit this flaw by analyzing the instructions cache, looking for subtraction's code implemented by BN_usub() and identify ER steps occurrences performed during RSA decryption. Knowing these occurrences they study the probabilities of happening in either a squaring or a multiplication. Across several Montgomery exponentiations with the same secret exponent an attacker is able to guess the fixed sequence of squarings and multiplications operations and further easily deduce the secret exponent. This attack is resistant to mitigations implemented in responses to previous <a href="#SPBA_attack">SPBA</a> and <a href="#Cache_hyperthreading">data cache analysis</a> MicroArchitectural attacks even when <a href="#RSA_remote_timing">base blinding</a> is provided. The OpenSSL team eventually made this extra reduction step branchless. Exponent blinding (add a random multiple of the group order to the exponent see <a href="side-channel-countermeasures.html">this page</a> for more details) could be an alternative for blocking this attack.</li>
+	    </ul>
+	  </li>
+
+	  <a name="SPBA_attack"></a>
+	  <li>[2007] Branch prediction vulnerabilities by Ac&#305;i&ccedil;mez, Gueron and Seifert.
+	    <ul>
+	      <li><a href="http://eprint.iacr.org/2007/039">paper</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=16076">changes</a></li>
+	      <li>The authors conjecture that an SPBA (Simple Prediction Branch Analysis) could be performed with enough precision to precisely learn about program flow execution of some selected parts of relevant crypto algorithms. They state that SPBA (analysis that they do not provide though) could be accomplished on any modern microprocessor not only on SMT processors by exploiting how scheduler works. Under this assumption, they introduce an attack on the Binary Extended Euclidean Algorithm (BEEA) of OpenSSL used in modular inversion operations (Note that BEEA was not used in every cases depending on parameters bit-lengths). They demonstrate how to reconstruct input operands x, y from the result of modular inversion x.x<sup>-1</sup> &equiv; 1 mod y from the former program flow analysis. Modular inversion is usually used in several public key cryptography operations and could lead to leak secret informations. Base blinding (useful for preventing pure timing attacks) is at best useless in these cases and at worst could be compromised widening the surface of attack to remote timing attacks. The proposed mitigations mechanisms mainly consist into avoiding conditional branching whenever it would provide useful information to the attacker (typically each time it depends on secret data or input data). They also propose a completely new resistant implementation of CRT-RSA called "Smooth CRT-RSA" which does not seem to have been integrated to OpenSSL though.</li>
+	    </ul>
+	  </li>
+
+	  <a name="RSA_signature_forgery"></a>
+	  <li>[2006] RSA signature forgery by Bleichenbacher.
+	    <ul>
+	      <li><a href="http://www.openssl.org/news/secadv_20060905.txt">advisory</a> &ndash; <a href="http://www.imc.org/ietf-openpgp/mail-archive/msg14307.html">description</a> &ndash; <a href="http://chargen.matasano.com/chargen/2006/9/18/rsa-signature-forgery-explained-with-nate-lawson-part-iv.html">description</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=15520">changes</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=15536">changes</a></li>
+	      <li>This attack forges valid signatures for RSA keys with small e=3 public exponent, with large 3072 bits modulus, when used with <a href="http://tools.ietf.org/html/rfc3447#section-8.2">PKCS1-v1_5</a> signature encoding and eventually verified by an implementation too permissive on data format verification. A malicious signer is able to forge a signature for a valid hash value without any private key by appending some chosen garbage data to its PKCS1-v1_5 representation to assemble a value from which it is possible to take a root cube. A flawed verifier uses its public key, raises the signature to the cube, extracts the hash value from the PKCS1-v1_5 byte string without considering the presence of the useless trailing data, successfully checks this hash against its own computed value therefore leading to authenticate this signature. In order to defeat this forgery the verifier must ensure that there is no remaining right trailing data appended after the hash or any additional ASN.1 parameter. Note also that probabilistic <a href="http://tools.ietf.org/html/rfc3447#page-29">RSASSA-PSS</a> signature scheme does prevent this attack. This attack has been refined since its publication, for instance some <a href="http://www.cdc.informatik.tu-darmstadt.de/reports/reports/sigflaw.pdf">improvements</a> targeting shorter modulus have been independently published.</li>
+	    </ul>
+	  </li>
+
+	  <a name="Cache_hyperthreading"></a>
+	  <li>[2005] Colin Percival's Hyper-Threading timing attack.
+	    <ul>
+	      <li><a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2005-0109">advisory</a> &ndash; <a href="http://www.daemonology.net/hyperthreading-considered-harmful/">description</a> &ndash; <a href="http://www.daemonology.net/papers/htt.pdf">paper</a> &ndash; <a href="http://rdist.root.org/2008/02/28/preventing-rsa-cache-timing-attacks/">description</a> &ndash; <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.60.1857">related (independently) attack</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=13346">changes</a></li>
+	      <li>This side channel attack uses a spy process to spot cache eviction patterns leading to extraction of secret information. Part of the secret key bits are recovered by analyzing cache timings of the sliding windows exponention algorithm used by OpenSSL to compute modular exponentiation. The spy process exploits the fact that microprocesor's cache is shared between multiple threads of execution as on processors with hyperthreading enabled.</li>
+
+	      <li>Let's see with an example what changes were implemented in response to this attack (extensive changes contributed by Matthew D Wood from Intel). A new modular exponentiation was implemented, it uses a fixed-window to precompute a small number of exponentiations. In the case of an RSA decryption operation involving a modulus N of 1024 bits, the Chinese Remainder Theorem is used to reduce the complexity of the computations by performing two separate exponentiations with each of the 512 bits prime factors as exponents. The fixed number of precomputations on a modern microprocessor (as e.g. on a Pentium 4 Northwood) with L1 data cache lines of 64 bytes and an exponent of 512 bits will be equal to 2<sup>5</sup>-1. Let's C<sub>q</sub> = C mod q where q is a prime factor of N and C is the ciphertext. The goal is to precompute the first 31 exponents (C<sub>q</sub>)<sup>1..31</sup> in order to reduce the complexity of computing (C<sub>q</sub>)<sup>d<sub>q</sub></sup> mod q where d<sub>q</sub> = d mod (q - 1) and d is the RSA private exponent. Note that because the underlying algorithm used is the Montgomery exponentiation using Montgomery reductions all the precomputations need to be represented under Montgomery's representation. Recall that Montgomery reduction is noted Mont(x, y) = x.y.R<sup>-1</sup> mod q where R is a power of 2 greater than q, typically R = 2<sup>32</sup> on 32 bits architectures. For a complete introduction to Montgomery reduction see <a href="http://www.cacr.math.uwaterloo.ca/hac/about/chap14.pdf">this book</a> section 14.3.2. Let p<sub>0</sub>, &#x2026;, p<sub>31</sub> be all the precomputations:
+
+		<p style="padding: 10px 50px 10px 50px; margin: 0px;">
+		  p<sub>0</sub> = Mont(1, R<sup>2</sup>) = R<sup>2</sup>.R<sup>-1</sup> mod q = R mod q<br />
+		  p<sub>1</sub> = Mont(C<sub>d</sub>, R<sup>2</sup>) = C<sub>d</sub>.R<sup>2</sup>.R<sup>-1</sup> mod q = C<sub>d</sub>.R mod q<br />
+		  p<sub>2</sub> = Mont(p<sub>1</sub>, p<sub>1</sub>) = p<sub>1</sub><sup>2</sup>.R<sup>-1</sup> mod q<br />
+		  p<sub>3</sub> = Mont(p<sub>2</sub>, p<sub>1</sub>) = p<sub>2</sub>.p<sub>1</sub>.R<sup>-1</sup> mod q<br />
+		  &#x2026;<br />
+		  p<sub>31</sub> = Mont(p<sub>30</sub>, p<sub>1</sub>)<br />
+		</p>
+
+		These precomputations are inserted into a same array, the original straightforward way of doing that was to insert them sequentially like this: | p<sub>0</sub> | p<sub>1</sub> | p<sub>2</sub> | ... | p<sub>31</sub> |. This array would be represented in a similar shape in the L1 cache. Each element p<sub>x</sub> of 512 bits for x &#x2208; [1,31] fits into a single cache line (otherwise with p<sub>x</sub> &gt; 512 it would have taken at least 2 consecutive cache lines to store a single element). Let line<sub>0</sub>, &#x2026;, line<sub>31</sub> be 32 consecutive L1 data cache lines:
+
+		<p style="padding: 10px 50px 10px 50px; margin: 0px;">
+		  line<sub>0</sub>:  p<sub>0</sub><br />
+		  line<sub>1</sub>:  p<sub>1</sub><br />
+		  line<sub>2</sub>:  p<sub>2</sub><br />
+		  &#x2026;<br />
+		  line<sub>31</sub>: p<sub>31</sub><br />
+		</p>
+
+		This is this representation that was vulnerable to the attack introduced by Percival. By observing which cache line was evicted (a whole cache line is either loaded or evicted from cache at once) or not (through timings observations) it was possible to deduce which p<sub>x</sub> was accessed by OpenSSL. Observing that a particular p<sub>x</sub> is used in a multiplication means that the value x has successfully been matched against a subpart of q revealing 5 bits of secret q.<br />
+
+		The purpose of the clever countermeasure implemented by this patch was to break the sequential order of the p<sub>x</sub>s and to interleave them instead by single byte chunks in an array. Which eventually leads to create cache lines representations of this form:
+
+		<p style="padding: 10px 50px 10px 50px; margin: 0px;">
+		  line<sub>0</sub>:  p<sub>0</sub>byte<sub>0</sub>,  p<sub>1</sub>byte<sub>0</sub>, &#x2026;,  p<sub>31</sub>byte<sub>0</sub><br />
+		  line<sub>1</sub>:  p<sub>0</sub>byte<sub>1</sub>,  p<sub>1</sub>byte<sub>1</sub>, &#x2026;,  p<sub>31</sub>byte<sub>1</sub><br />
+		  &#x2026;<br />
+		  line<sub>63</sub>: p<sub>0</sub>byte<sub>63</sub>, p<sub>1</sub>byte<sub>63</sub>, &#x2026;, p<sub>31</sub>byte<sub>63</sub><br />
+		</p>
+
+		In this case observing accessed cache lines' patterns reveals nothing. Note that a Pentium 4 Northwood has 128 L1 data cache lines thus in this case all precomputed exponentiations may fit together in the L1 cache at the same time.</li>
+	    </ul>
+	  </li>
+
+	  <a name="SSL_TLS_RSA_forgery"></a>
+	  <li>[2003] Klima-Pokorny-Rosa attack on RSA in SSL/TLS.
+	    <ul>
+	      <li><a href="http://www.openssl.org/news/secadv_20030319.txt">advisory</a> &ndash; <a href="http://eprint.iacr.org/2003/052">paper</a> &ndash; extends <a href="https://eprints.kfupm.edu.sa/29710/1/29710.pdf">this attack</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=13772">changes</a> &ndash; <a href="http://tools.ietf.org/html/rfc5246#section-7.4.7.1">Client Key Exchange Message</a> (TLS Protocol) &ndash; <a href="http://code.google.com/p/bleichenbacher/">tool</a></li>
+	      <li>Original <a href="https://eprints.kfupm.edu.sa/29710/1/29710.pdf">Bleichenbacher's attack</a>: adaptative chosen-ciphertext attack relying on specifics properties of <a href="http://tools.ietf.org/html/rfc3447#section-7.2">RSAES-PKCS1-v1_5</a> encryption scheme (several bytes are knowns and constants) and submitting its decryption queries to a SSL decryption oracle (see its corresponding <a href="http://tools.ietf.org/html/rfc5246#section-7.4.7.1">protocol state</a>) in order to determine if these ciphertexts are PKCS1-v1_5 conforming or not. This information is obtained from timing measurements or from overly detailed error messages. It permits one attacker through a high number of chosen ciphertexts to narrow the space of possible plaintext candidates until only one remains. As countermeasures the author suggested to check ciphertext's integrity before decrypting it or using <a href="http://tools.ietf.org/html/rfc3447#section-7.1">RSAES-OAEP</a> encryption scheme. However, even without these protections (<a href="http://tools.ietf.org/html/rfc5246">SSL/TLS</a> does not provide them) this attack is not practical against a correctly implemented SSL server: returning an error when a message is not PKCS1-v1_5 encoded or otherwise further checking its protocol version number and premaster secret length (46+2 bytes) and returning the same error for wrong values. Therefore most of PKCS1-v1_5 conforming forged ciphertexts will be rejected by these additional tests with an overwhelming probability. Thus it will be impractical to distinguish between conforming and non-conforming ciphertexts, defeating this attack. See also this <a href="http://tools.ietf.org/html/rfc3447#section-7.2.2">section</a> and its associated note.</li>
+	      <li>Klima-Pokorny-Rosa's attack: the authors improved the previous attack and succeeded in using OpenSSL's SSL server as a reliable oracle for guessing rightly padded ciphertexts. They observed that OpenSSL returned a distinct error message for messages with bad protocol version numbers. Furthermore, a ciphertext raising this error had necessarily been successfully decrypted priorly to this check meaning that its padding was correct. Therefore OpenSSL was vulnerable to a "bad version oracle" identifying PKCS1-v1_5 conforming messages whenever bad version number errors are returned.</li>
+	      <li>To sum it all up: all checks must be correctly performed (padding, version, length), no distinguishable error message must be returned but instead computations must always go forward to the end of the handshake while taking care of not leaking timing informations. It is critical that an attacker could not use in any manner any information from the server to exploit it as an oracle and distinguish among all forged ciphertexts which are well formed plaintexts.</li>
+	    </ul>
+	  </li>
+
+	  <a name="RSA_remote_timing"></a>
+	  <li>[2003] Timing-based attacks on RSA keys by Boneh and Brumley.
+	    <ul>
+	      <li><a href="http://www.openssl.org/news/secadv_20030317.txt">advisory</a> &ndash; <a href="http://marc.info/?l=bugtraq&m=104766550528628&w=2">ml</a> &ndash; <a href="http://crypto.stanford.edu/~dabo/abstracts/ssl-timing.html">paper</a> &ndash; <a href="http://pdos.csail.mit.edu/6.893/2009/lec/l15-sidechan.txt">description</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=13777">changes</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=13780">changes</a></li>
+	      <li>This work directly extends the <a href="http://www.cryptography.com/timingattack/paper.html">seminal work</a> of Kocher on timing attacks (note that this work did not originally work on modular exponentiations using CRT). The authors developed a remote timing attack against OpenSSL which let them extract the SSL server's private key on decryption queries. The decryption uses the Chinese Remainder Theorem and a sliding-window modular exponentiation algorithm to perform exponentiations. They exploited two algorithmic data dependencies which create timing differences inside two different algorithms used during decryption through modular exponentiation C<sup>d</sup> mod N on input ciphertext. First, the <a href="http://en.wikipedia.org/wiki/Montgomery_reduction">Montgomery reduction</a> algorithm called on modular multiplication has a conditional extra reduction thus slowing computations when this step accomplished. Second, the choice of the multi-precision integer multiplication algorithm depends on the size of the operands. The multiplication is faster when operands have the same number of words and <a href="http://en.wikipedia.org/wiki/Karatsuba_algorithm">Karatsuba</a> algorithm is used, than with a non-optimized algorithm. The attack works by guessing successive bits of one RSA's prime factor. The attack decrypts its own guesses, computes associated timings and try to isolate larges timing differences in order to reveal the next bit. Note that RSA encryption encoding <a href="http://tools.ietf.org/html/rfc3447#section-7.2">RSAES-PKCS1-v1_5</a> has no effect on this attack. Base blinding such as described into Kocher's paper is an effective method for mitigating this attack. The OpenSSL team already had implemented RSA blinding but it wasn't enabled by default. Therefore the purpose of the applied patch was simply to turn blinding on for all RSA decryption operations by default.</li>
+	    </ul>
+	  </li>
+
+
+	  <!-- crypto, side-channel, timing, cbc, ssl/tls, errors report, authenticate and encrypt -->
+	  <a name="SSL_TLS_CBC_timings"></a>
+	  <li>[2003] Timing-based attacks on SSL/TLS with CBC encryption by Canvel, Hiltgen, Vaudenay and Vuagnoux.
+	    <ul>
+	      <li><a href="http://www.openssl.org/news/secadv_20030219.txt">advisory</a> &ndash; <a href="http://www.openssl.org/~bodo/tls-cbc.txt">description</a> &ndash; <a href="http://lasecwww.epfl.ch/memo/memo_ssl.shtml">description</a> &ndash; <a href="http://lasecwww.epfl.ch/pub/lasec/doc/CHVV03.ps">paper</a> &ndash; <a href="http://canvel.free.fr/crypto/pdf/crypto03.pdf">slides</a> &ndash; <a href="http://lasecwww.epfl.ch/pub/lasec/doc/Vau02a.ps">paper</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=10184">changes</a></li>
+	      <li>More readings on authenticated encryption see <a href="http://eprints.kfupm.edu.sa/27059/1/27059.pdf">this</a> and <a href="http://eprint.iacr.org/2001/079.ps">this</a> article and <a href="http://en.wikipedia.org/wiki/AEAD_block_cipher_modes_of_operation">AEAD</a> algorithms especially <a href="http://en.wikipedia.org/wiki/EAX_mode">EAX mode</a>.</li>
+	    </ul>
+	  </li>
+
+	  <a name="faults"></a>
+	  <li>[2001] Check the result of RSA-CRT to protect against computations errors, based on the work of Boneh, DeMillo and Lipton.
+	    <ul>
+	      <li><a href="http://theory.stanford.edu/~dabo/papers/faults.ps.gz">paper</a> &ndash; <a href="http://crypto.stanford.edu/~dabo/abstracts/RSAattack-survey.html">description</a> (section 5.2) &ndash; <a href="http://cvs.openssl.org/chngview?cn=4469">changes</a></li>
+	      <li>This paper demonstrates the need for checking results or intermediate results against hardware or software faults (see also <a href="http://eprint.iacr.org/2004/100.pdf">this article</a> on induced hardware faults) and only returning valid results. The authors introduce an attack on RSA signatures finding one of the prime factors without factoring the modulus. The attacker only needs access to a signer oracle which on rare occasions returns wrong signatures due to arbitrary faults (for instance a fault can lead to a random bit flip). This attack works on RSA signatures based on the Chinese Remainder Theorem (CRT), one half (and one half only) of this computation must contain an error. The attacker only needs one erroneous signature along with the original message (improvement contributed by Lenstra) to perform his attack. At the difference of <a href="http://tools.ietf.org/html/rfc3447#section-8.2">RSASSA-PKCS1-v1_5</a> signature encoding, <a href="http://tools.ietf.org/html/rfc3447#section-8.1">RSASSA-PSS</a> does prevent this attack. OpenSSL mitigates this attack by checking that S<sup>e</sup> &equiv; M mod N before returning any signature. If this verification fails with a bogus signature it recomputes and returns the modular exponentiation of M<sup>d</sup> mod N without using CRT. Note that randomized encodings schemes may not prevent all attacks of this class. In fact, it appears that <a href="http://tools.ietf.org/html/rfc3447#section-7.1">RSAES-OAEP</a> offers only limited protection over a faulty processor whose multiplier would output at least one wrong result for a given couple of operands, see <a href="http://pdos.csail.mit.edu/6.893/2009/readings/rsa-bug-attacks.pdf">Bug Attacks</a> by Biham and al. As a side note, fault attacks are even a bigger concern in embedded systems (such as smart cards) and verifying the result with the public exponent is often inefficient. Moreover, It has been established that Shamir's countermeasure (section 4) as well as all its variants were not resistant to all known attacks, thus secure alternatives are still currently investigated. Recently a new type of attack "second-order" attacks were introduced by Kim and Quisquater (in <a href="http://books.google.com/books?id=lGljEcZ-Q9wC&lpg=PP1&pg=PA215#v=onepage&q=&f=false">this article</a>), while first-order attacks generally inject a fault during a computation in order to produce a wrong result, second-order attacks try to prevent its detection or the execution of its mitigation. See <a href="http://eprint.iacr.org/2009/024.pdf">this paper</a> by Dottax et Al. for more details on the current state on this subject.</li>
+	    </ul>
+	  </li>
+
+	  <a name="DSA_Bleichenbacher"></a>
+	  <li>[2001] Attack against the pseudorandom generator of DSA by Bleichenbacher.
+	    <ul>
+	      <li><a href="http://csrc.nist.gov/publications/drafts/dss_recommendation.pdf">description</a> &ndash; <a href="http://lasecwww.epfl.ch/php_code/publications/search.php?ref=Vau03a">description</a> (section 2.2) &ndash; <a href="http://archives.neohapsis.com/archives/crypto/2000-q4/thread.html#600">ml</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=3984">changes</a> &ndash; <a href="http://cvs.openssl.org/chngview?cn=3990">changes</a></li>
+	      <li><a href="http://en.wikipedia.org/wiki/Digital_Signature_Algorithm">DSA</a> standard initially specified to choose a random parameter k of 160 bits and reduce it modulo a prime q, where q &#x2208; [2<sup>159</sup>, 2<sup>160</sup>-1]. Daniel Bleichenbacher observed that the values in range [0, 2<sup>160</sup>-q] had therefore twice the probability to be chosen than the others values. It is unlikely though it had a real incidence on the security of the private key. See the <a href="#Debian_PRNG">Debian OpenSSL PRNG bug</a> for another example of attack on k when this parameter lacks of entropy.</li>
+	    </ul>
+	  </li>
+
+	</ul>
+      </div>
+
+      <div class="text-center" style="margin-top: 50px;">
+	 Last updated 01-16-2010
+      </div>
+      </div> <!-- layout -->
+    </div> <!-- container -->
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>
+Blog
+</title>
+
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/pygments.css" rel="stylesheet">
+    <link href="/css/blog.css" rel="stylesheet">
+    
+    
+  </head>
+  <body>
+    
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <span class="navbar-brand">January 2014</span>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/archives.html">Archives</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    
+    <div class="container">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+        
+        <div class="entry">
+	  
+          <h2><a href="/blog/2014/01/11/specialized_crypto_implementations.html" class="noext">The Verification Problem Introduced by Highly Specialized Cryptographic Implementations
+</a></h2>
+	  
+          <h6><span class="pubdate">11 January 2014</span> <a class="permalink" title="Permalink" href="/blog/2014/01/11/specialized_crypto_implementations.html">&infin;</a></h6>
+
+          <div class="entry_content">
+            <p>As cryptographic implementations naturally strive for better and better performances it's actually very common to see generic implementations dropped in favor of highly specialized ones. Therefore, there's often a dedicated implementation not only for any single family of crypto algorithm but also for any single combination of parameters and cpu architectures. The obvious downside is this could easily result in large code bases difficult to verify and audit.</p>
+<p><a href="http://tweetnacl.cr.yp.to/">TweetNaCl</a> &ndash; a compact implementation of <a href="http://nacl.cr.yp.to/">NaCl</a> &ndash; developped by Bernstein et al. <a href="http://tweetnacl.cr.yp.to/tweetnacl-20131229.pdf">discusses the challenges</a> introduced by these specialized cryptographic implementations:</p>
+<blockquote>
+<p>However, NaCl’s performance comes at a price. A single NaCl function usually consists of several different implementations, often including multiple assembly-language implementations optimized for different CPUs. NaCl’s compilation system is correspondingly complicated. Auditing the NaCl source is a time-consuming job. For example, four implementations of the ed25519 signature system have been publicly available and waiting for integration into NaCl since 2011, but in total they consist of 5521 lines of C code and 16184 lines of qhasm code.</p>
+</blockquote>
+<p>Highlighting a bug found in the relatively large amount of code implementing operations on Edwards curves such as point addition.</p>
+<blockquote>
+<p>Partial audits have revealed a bug in this software (r1 += 0 + carry should be r2 += 0 + carry in amd64-64-24k) that would not be caught by random tests; this illustrates the importance of audits. There has been some progress towards computer verification of formal proofs of correctness of software, but this progress is still far from complete verification of a usable high-security cryptographic library.</p>
+</blockquote>
+          </div>
+        </div> <!-- entry -->
+        
+      </div> <!-- layout -->
+    </div> <!-- container -->
+
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

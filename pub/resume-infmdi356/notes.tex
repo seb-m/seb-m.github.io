@@ -1,0 +1,31 @@
+\section{Sections temporaires (seront retirées dans la version finale)}
+
+\subsection{Notes de lecture}
+
+\begin{list}{\texttt{$\bullet$}}{}
+\item Rappel : when working on $k$-bit integers, most implementations implement addition and subtraction in time $O(k)$, multiplication, division, and gcd in time $O(k^2)$ (although faster implementations exist for very large $k$), and modular exponentation in time $O(k^3)$.
+\item $P$ et $Q$ sont des safe primes (car $(P-1)/2=p$ est aussi un prime).
+\item Le calul online du prouveur ($y = r + Se$) fait intervenir uniquemment une addition et une multiplication dans $\ZZ$ (opérations non modulaires). La seule contrainte résultante est de s'assurer que $y < A$.
+\item With the RSA scheme and a modulus of length t = 768, signature generation using naive techniques requires, on average, 1152 modular multiplications (more precisely, 768 squarings and 384 multiplications).
+\item La difficulté du challenge $e$ est fonction de la constante $B$. Pour l'identification $B$ est une constante (ne dépend donc pas de $k$), l'influence de $B$ peut être accentuée en variant le paramètre $l$ (nombre de rounds). Pour la signature $B$ dépend directement de $k$, car il n'y a qu'un seul round.
+\item Un prouveur ordinaire sera capable d'être accepté avec la probalité $1/b^l$.
+\item Prouver la sécurité du protocole d'identification équivaut à vérifier les trois propriétés de completness (consistance), soundness (solidité), zero-knowledge.
+\item Le schéma de signature est directement obtenu à partir du schéma d'identification en suivant un raisonnement introduit dans~\cite{ZK}. Le challenge $e$ n'est plus déterminé aléatoirement mais par une fonction de hash (peut également être réalisé offline).
+\item Le paramétre de sécurité $k$, dont dépendent la taille des composés de $N$; fixe (entre autre) la difficulté de factoriser le modulo.
+\item Taille et valeurs des paramétres : $l=? , k=512, |N|=1024, |e|=|B|=80, |S|=513, |A|=672?848?$
+\item Pour que le théorême~1 (Completeness) s'applique il faut que $2^klB / A$ soit négligeable. Dans les conditions réelles (d'après la Figure~4) d'application du schéma on peut vérifier que cette condition est vérifiée : $2^{512}\times1\times2^{80}/2^{848} = 1/2^{256} < 1/512^c (\forall\ c\ cste)$ .
+\item Dans le cas où le théorême~2 (Soundness) s'applique, il est prouvé que le $\textcircumacute{P}$ malhonnête n'a plus qu'à factoriser $N$ en un temps $O(kBlt/\epsilon + k + |B|$... soit en temps exponentiel. 
+\end{list}
+
+
+%% asymetrique mais sans utilisation de clé publique
+%% preuve signature : contre adaptive chosen-message attack (car c'est le plus dur)
+
+\subsection{ToDo}
+
+\begin{list}{\texttt{$\bullet$}}{}
+\item Comprendre GPS (variante de Schnorr pour online), et les problèmes de sécurités relatifs au one-key attack scenario.
+\item Comprendre $\epsilon/2$, $O(|Y-NE|)=O(k+|B|)$, les complexités de PS décrites dans le tableau de comparaison.
+\item Regarder si ce schéma a été cassé depuis ? si il est utilisé ? si il ne l'est pas pourquoi ? marché pas prêt ? meilleur concurrent ? -- on dirait que le GPS n'était pas si mauvais il à l'air d'avoir été approfondi récemment.
+%\item Peut-être préparer une section sur le côté pratique : quels algorithmes utiliser pour chaque opérations (test de primalité,...), et regarder les complexités associées.
+\end{list}

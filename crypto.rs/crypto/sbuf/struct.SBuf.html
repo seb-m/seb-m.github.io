@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `SBuf` struct in crate `crypto`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, SBuf">
+
+    <title>crypto::sbuf::SBuf - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    <link rel="shortcut icon" href="http://www.rust-lang.org/favicon.ico">
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        <a href='../../crypto/index.html'><img src='http://www.rust-lang.org/logos/rust-logo-128x128-blk.png' alt='' width='100'></a>
+        <p class='location'><a href='../index.html'>crypto</a>::<wbr><a href='index.html'>sbuf</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.GuardedHeapAllocator.html'>GuardedHeapAllocator</a><a class='struct current' href='struct.SBuf.html'>SBuf</a><a class='struct ' href='struct.StdHeapAllocator.html'>StdHeapAllocator</a></div><div class='block trait'><h2>Traits</h2><a class='trait ' href='trait.Allocator.html'>Allocator</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>crypto</a>::<wbr><a href='index.html'>sbuf</a>::<wbr><a class='struct' href=''>SBuf</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-2304' href='http://doc.rust-lang.org/common/sbuf/struct.SBuf.html?gotosrc=2304'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct SBuf&lt;A, T&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>Secure Buffer.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.len' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.len' class='fnname'>len</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a></code></h4>
+<h4 id='method.new_zero' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.new_zero' class='fnname'>new_zero</a>(length: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>New allocated buffer with its memory zeroed-out.</p>
+</div><h4 id='method.new_rand' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.new_rand' class='fnname'>new_rand</a>(length: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>New allocated buffer with its memory randomly generated.</p>
+</div><h4 id='method.from_fn' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_fn' class='fnname'>from_fn</a>(length: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, op: |<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>| -&gt; T) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>New allocated buffer with its <code>length</code> elements initialized from
+provided closure <code>op</code>.</p>
+</div><h4 id='method.from_slice' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_slice' class='fnname'>from_slice</a>(values: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[T]</a>) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>New buffer from slice.</p>
+</div><h4 id='method.from_buf' class='method'><a class='stability Experimental' title='Experimental'></a><code>unsafe fn <a href='#method.from_buf' class='fnname'>from_buf</a>(buf: *const T, length: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>New buffer from unsafe buffer.</p>
+</div><h4 id='method.from_slices' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_slices' class='fnname'>from_slices</a>(items: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[T]</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>Build a new instance by concatenating <code>items</code> together.</p>
+</div><h4 id='method.from_sbufs' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_sbufs' class='fnname'>from_sbufs</a>(items: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>Build a new instance by concatenating <code>items</code> together.</p>
+</div><h4 id='method.as_ptr' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_ptr' class='fnname'>as_ptr</a>(&amp;self) -&gt; *const T</code></h4>
+<div class='docblock'><p>Return an immutable pointer to buffer&#39;s memory.</p>
+</div><h4 id='method.as_mut_ptr' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_mut_ptr' class='fnname'>as_mut_ptr</a>(&amp;mut self) -&gt; *mut T</code></h4>
+<div class='docblock'><p>Return a mutable pointer to buffer&#39;s memory.</p>
+</div><h4 id='method.as_slice' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_slice' class='fnname'>as_slice</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[T]</a></code></h4>
+<div class='docblock'><p>Work with <code>self</code> as a slice.</p>
+</div><h4 id='method.as_mut_slice' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_mut_slice' class='fnname'>as_mut_slice</a>(&amp;mut self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [T]</a></code></h4>
+<div class='docblock'><p>Work with <code>self</code> as a mutable slice.</p>
+</div><h4 id='method.as_cast' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_cast' class='fnname'>as_cast</a>&lt;U&gt;(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[U]</a></code></h4>
+<div class='docblock'><p>Cast <code>self</code> with another type and return a slice on it.</p>
+</div><h4 id='method.as_mut_cast' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_mut_cast' class='fnname'>as_mut_cast</a>&lt;U&gt;(&amp;mut self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [U]</a></code></h4>
+<div class='docblock'><p>Cast <code>self</code> with another type and return a mut slice on it.</p>
+</div><h4 id='method.get' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.get' class='fnname'>get</a>(&amp;self, index: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;T</code></h4>
+<div class='docblock'><p>Return a reference to the value at index <code>index</code>. Fails if
+<code>index</code> is out of bounds.</p>
+</div><h4 id='method.get_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.get_mut' class='fnname'>get_mut</a>(&amp;mut self, index: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;mut T</code></h4>
+<div class='docblock'><p>Return a mutable reference to the value at index <code>index</code>. Fails
+if <code>index</code> is out of bounds.</p>
+</div><h4 id='method.iter' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.iter' class='fnname'>iter</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/core/slice/struct.Items.html' title='core::slice::Items'>Items</a>&lt;T&gt;</code></h4>
+<div class='docblock'><p>Return an iterator over references to the elements of the buffer
+in order.</p>
+</div><h4 id='method.iter_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.iter_mut' class='fnname'>iter_mut</a>(&amp;mut self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/core/slice/struct.MutItems.html' title='core::slice::MutItems'>MutItems</a>&lt;T&gt;</code></h4>
+<div class='docblock'><p>Return an iterator over mutable references to the elements of the
+buffer in order.</p>
+</div><h4 id='method.slice' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice' class='fnname'>slice</a>(&amp;self, start: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, end: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[T]</a></code></h4>
+<div class='docblock'><p>Return a slice of self spanning the interval [<code>start</code>, <code>end</code>).
+Fails when the slice (or part of it) is outside the bounds of self,
+or when <code>start</code> &gt; <code>end</code>.</p>
+</div><h4 id='method.slice_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_mut' class='fnname'>slice_mut</a>(&amp;mut self, start: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, end: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [T]</a></code></h4>
+<div class='docblock'><p>Return a mutable slice of <code>self</code> between <code>start</code> and <code>end</code>.
+Fails when <code>start</code> or <code>end</code> point outside the bounds of <code>self</code>, or when
+<code>start</code> &gt; <code>end</code>.</p>
+</div><h4 id='method.slice_from' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_from' class='fnname'>slice_from</a>(&amp;self, start: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[T]</a></code></h4>
+<div class='docblock'><p>Return a slice of <code>self</code> from <code>start</code> to the end of the buffer.
+Fails when <code>start</code> points outside the bounds of self.</p>
+</div><h4 id='method.slice_from_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_from_mut' class='fnname'>slice_from_mut</a>(&amp;mut self, start: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [T]</a></code></h4>
+<div class='docblock'><p>Return a mutable slice of self from <code>start</code> to the end of the buffer.
+Fails when <code>start</code> points outside the bounds of self.</p>
+</div><h4 id='method.slice_to' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_to' class='fnname'>slice_to</a>(&amp;self, end: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[T]</a></code></h4>
+<div class='docblock'><p>Return a slice of self from the start of the buffer to <code>end</code>.
+Fails when <code>end</code> points outside the bounds of self.</p>
+</div><h4 id='method.slice_to_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_to_mut' class='fnname'>slice_to_mut</a>(&amp;mut self, end: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [T]</a></code></h4>
+<div class='docblock'><p>Return a mutable slice of self from the start of the buffer to <code>end</code>.
+Fails when <code>end</code> points outside the bounds of self.</p>
+</div><h4 id='method.split_at_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.split_at_mut' class='fnname'>split_at_mut</a>(&amp;mut self, mid: <a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [T]</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [T]</a>)</a></code></h4>
+<div class='docblock'><p>Return a pair of mutable slices that divides the buffer at an index.</p>
+
+<p>The first will contain all indices from <code>[0, mid)</code> (excluding the
+index <code>mid</code> itself) and the second will contain all indices from
+<code>[mid, len)</code> (excluding the index <code>len</code> itself). Fails if
+<code>mid &gt; len</code>.</p>
+</div><h4 id='method.reverse' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.reverse' class='fnname'>reverse</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Reverse the order of elements in a buffer, in place.</p>
+</div></div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/num/trait.FromPrimitive.html' title='core::num::FromPrimitive'>FromPrimitive</a>&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.from_bytes' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.from_bytes' class='fnname'>from_bytes</a>(bytes: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<div class='docblock'><p>New buffer from bytes.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.drop' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.clone' class='method'><a class='stability Unstable' title='Unstable'></a><code>fn <a href='#method.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h4>
+<h4 id='method.clone_from' class='method'><a class='stability Experimental' title='Experimental: this function is mostly unused'></a><code>fn <a href='#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, &amp;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Index.html' title='core::ops::Index'>Index</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, T&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.index' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.index' class='fnname'>index</a>(&amp;self, index: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;T</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.IndexMut.html' title='core::ops::IndexMut'>IndexMut</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, T&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.index_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.index_mut' class='fnname'>index_mut</a>(&amp;mut self, index: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; &amp;mut T</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Slice.html' title='core::ops::Slice'>Slice</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>[T]</a>&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.as_slice_' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_slice_' class='fnname'>as_slice_</a>(&amp;'a self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a [T]</a></code></h4>
+<h4 id='method.slice_from_or_fail' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_from_or_fail' class='fnname'>slice_from_or_fail</a>(&amp;'a self, start: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a [T]</a></code></h4>
+<h4 id='method.slice_to_or_fail' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_to_or_fail' class='fnname'>slice_to_or_fail</a>(&amp;'a self, end: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a [T]</a></code></h4>
+<h4 id='method.slice_or_fail' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_or_fail' class='fnname'>slice_or_fail</a>(&amp;'a self, start: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, end: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a [T]</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.SliceMut.html' title='core::ops::SliceMut'>SliceMut</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>[T]</a>&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.as_mut_slice_' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.as_mut_slice_' class='fnname'>as_mut_slice_</a>(&amp;'a mut self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a mut [T]</a></code></h4>
+<h4 id='method.slice_from_or_fail_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_from_or_fail_mut' class='fnname'>slice_from_or_fail_mut</a>(&amp;'a mut self, start: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a mut [T]</a></code></h4>
+<h4 id='method.slice_to_or_fail_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_to_or_fail_mut' class='fnname'>slice_to_or_fail_mut</a>(&amp;'a mut self, end: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a mut [T]</a></code></h4>
+<h4 id='method.slice_or_fail_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.slice_or_fail_mut' class='fnname'>slice_or_fail_mut</a>(&amp;'a mut self, start: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>, end: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.uint.html'>uint</a>) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a mut [T]</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Deref.html' title='core::ops::Deref'>Deref</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>[T]</a>&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.deref' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.deref' class='fnname'>deref</a>(&amp;self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[T]</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.DerefMut.html' title='core::ops::DerefMut'>DerefMut</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>[T]</a>&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.deref_mut' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.deref_mut' class='fnname'>deref_mut</a>(&amp;mut self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;mut [T]</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.ne' class='fnname'>ne</a>(&amp;self, &amp;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.assert_receiver_is_total_eq' class='method'><a class='stability Unstable' title='Unstable: Definition may change slightly after trait reform'></a><code>fn <a href='#method.assert_receiver_is_total_eq' class='fnname'>assert_receiver_is_total_eq</a>(&amp;self)</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.Show.html' title='core::fmt::Show'>Show</a> for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.fmt' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.fmt' class='fnname'>fmt</a>(&amp;self, f: &amp;mut <a class='struct' href='http://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>, <a class='enum' href='http://doc.rust-lang.org/nightly/core/fmt/enum.FormatError.html' title='core::fmt::FormatError'>FormatError</a>&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, E, S: <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Encoder.html' title='serialize::serialize::Encoder'>Encoder</a>&lt;E&gt;, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Encodable.html' title='serialize::serialize::Encodable'>Encodable</a>&lt;S, E&gt;&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Encodable.html' title='serialize::serialize::Encodable'>Encodable</a>&lt;S, E&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.encode' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.encode' class='fnname'>encode</a>(&amp;self, s: &amp;mut S) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>, E&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, E, D: <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Decoder.html' title='serialize::serialize::Decoder'>Decoder</a>&lt;E&gt;, T: <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a> + <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Decodable.html' title='serialize::serialize::Decodable'>Decodable</a>&lt;D, E&gt;&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/serialize/trait.Decodable.html' title='serialize::serialize::Decodable'>Decodable</a>&lt;D, E&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.decode' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.decode' class='fnname'>decode</a>(d: &amp;mut D) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;, E&gt;</code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/serialize/hex/trait.ToHex.html' title='serialize::hex::ToHex'>ToHex</a> for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, <a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;</code></h3><div class='impl-methods'><h4 id='method.to_hex' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.to_hex' class='fnname'>to_hex</a>(&amp;self) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></h4>
+</div><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../../crypto/sbuf/trait.Allocator.html' title='crypto::sbuf::Allocator'>Allocator</a>, S, T: <a class='trait' href='../../crypto/hash/trait.Hash.html' title='crypto::hash::Hash'>Hash</a>&lt;S&gt; + <a class='trait' href='http://doc.rust-lang.org/nightly/core/kinds/trait.Copy.html' title='core::kinds::Copy'>Copy</a>&gt; <a class='trait' href='../../crypto/hash/trait.Hash.html' title='crypto::hash::Hash'>Hash</a>&lt;S&gt; for <a class='struct' href='../../crypto/sbuf/struct.SBuf.html' title='crypto::sbuf::SBuf'>SBuf</a>&lt;A, T&gt;</code></h3><div class='impl-methods'><h4 id='method.hash' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.hash' class='fnname'>hash</a>(&amp;self, state: &amp;mut S) -&gt; <a class='type' href='http://doc.rust-lang.org/nightly/std/io/type.IoResult.html' title='std::io::IoResult'>IoResult</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.unit.html'>()</a>&gt;</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "crypto";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

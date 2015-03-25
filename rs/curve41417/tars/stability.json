@@ -1,0 +1,1 @@
+{"name":"tars","counts":{"deprecated":0,"unstable":2,"stable":41,"unmarked":60},"submodules":[{"name":"allocator","counts":{"deprecated":0,"unstable":0,"stable":2,"unmarked":15},"submodules":[]},{"name":"malloc","counts":{"deprecated":0,"unstable":0,"stable":0,"unmarked":10},"submodules":[]}]}

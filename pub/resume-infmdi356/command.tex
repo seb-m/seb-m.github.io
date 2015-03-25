@@ -1,0 +1,31 @@
+\newcommand{\ttt}[1]{\texttt{#1}}
+
+% numérotation des définitions, théorêmes, propositions
+\newtheorem{de}{Définition}[subsection]
+\newtheorem{theo}{Théorème}[section]
+\newtheorem{prop}[theo]{Proposition}
+
+
+%% nouvelles commandes
+
+\newcommand{\ordmult}{\mathop{.}} % \ordmult est l'opérateur de multiplication
+                                  % d'ordinaux
+
+\newcommand{\expo}[2]{#1^{#2}} % exponentielle
+
+\newcommand{\ZZ}{\mathbb{Z}} % the integers (just write \ZZ_n for integers mod n)
+\newcommand{\QQ}{\mathbb{Q}} % the rationals
+\newcommand{\RR}{\mathbb{R}} % the reals
+\newcommand{\CC}{\mathbb{C}} % the complex numbers
+
+%% preuves
+%% \begin{proof}
+%%  ...
+%% \end{proof}
+\renewenvironment{proof}{\addvspace{\bigskipamount}\noindent{\em Preuve. }}%
+{\noindent $\Box$\par\addvspace{\bigskipamount}}
+
+\newenvironment{proofof}[1]{\addvspace{\bigskipamount}\noindent{\em
+Preuve de #1. }}%
+{\noindent $\Box$\par\addvspace{\bigskipamount}}
+

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>Nginx Crypto Challenge's Solution</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/pygments.css">
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/crypto/challenge_nginx" class="navbar-brand">Nginx challenge</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    <div class="container content-streched main-content">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+      <div class="text-center">
+	<h1>Nginx Crypto Challenge's Solution</h1>
+      </div>
+      <br />
+
+      <div id="content">
+<h2>Overall Idea</h2>
+
+<p>This exercice mainly illustrates length-extension attacks and collision of inputs on Merkle-Damgård hash functions, for more details on this type of attack see the advisory document <!--http://netifera.com/research/flickr_api_signature_forgery.pdf--><a href="http://packetstormsecurity.org/files/view/81729/flickr_api_signature_forgery.pdf">flickr_api_signature_forgery.pdf</a> by Thai Duong and Juliano Rizzo along with the documents listed in their bibliography.</p>
+
+	<p>In this case, the main idea is to accomplish a length-extension attack by profiting from the fact that the secret is the first element hashed. Thus the attacker might operate on two elements, the URI and the timestamp (expiration date). The first possibility is to let the URI as it is and just modify the timestamp value by appending a new timestamp. While the value could overflow and might somehow be controlled there is however an element preventing this idea, it's the padding, the two timestamps would not really be juxtaposed there would be separated by non-numeric (invalid in the context of <a href="https://github.com/git-mirror/nginx/blob/master/src/core/ngx_string.c#L979">ngx_atotm()</a> function) padding bytes. The second possible idea is to modify both fields, the URI would represent the concatenation of all fields previously hashed in the original hash including the original padding bytes, and the timestamp would be assigned a new choosen value. Thus, in this case the new fields would be:</p>
+
+	<pre>
+uri   : /p/eve/restricted.txt1295613171padding
+expire: 1658275195  # Year 2022</pre>
+
+	<p>Therefore the password concatenated to the new URI would handle all the data previously hashed along with the correct padding, and the new expiration date would be just an update of the original hash value. However modifying the URI is not straigthforward as it changes the requested ressource, so it may not correspond to a valid ressource on the server, but in this case the following rewrite makes the target's ressource static, always redirecting to the file <code>restricted.txt</code> as long as the request is rightly authenticated.</p>
+
+<div class="highlight"><pre><span class="kn">rewrite</span> <span class="s">^</span> <span class="s">/p/restricted.txt</span> <span class="s">break</span><span class="p">;</span>
+</pre></div>
+
+	<h2>Building Blocks</h2>
+
+	<p>The snippets of source code below are extracted from <a href="/crypto/challenge_nginx/solution/challenge.py">challenge.py</a> which itself uses <a href="/crypto/challenge_nginx/solution/md5.py">md5.py</a> an implementation of MD5 in Python copied from the PyPy's project.</p>
+
+	<p>The main function <code>md5_extend()</code> takes as arguments the target host <code>http://cc.dbzteam.org:9000</code>, the original uri <code>/p/eve/restricted.txt</code>, the original secret hash <code>aSYSRnsL0by4M1l1tbPcrQ</code> generated for the timestamp <code>1295613171</code> and will try to generate a new valid request with a new choosen expiration date without knowledge of the server's secret. Because it doesn't know the length of the password, it has to generate different padding blocks until one matching the length of the password produces a valid request. This code tests for passwords of size comprised between 1 and 31 bytes. As soon as a request succeeds, by receiving a response code value of <code>200</code> it immediately read and return the content of the file.</p>
+
+<div class="highlight"><pre>
+<span class="k">def</span> <span class="nf">md5_extend</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="n">base_hash</span><span class="p">,</span> <span class="n">expire</span><span class="p">):</span>
+    <span class="n">new_expire</span> <span class="o">=</span> <span class="s">&#39;1658275195&#39;</span>  <span class="c"># 2022</span>
+    <span class="n">base_new_uri</span> <span class="o">=</span> <span class="n">uri</span> <span class="o">+</span> <span class="n">expire</span>
+    <span class="n">base_new_uri_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_new_uri</span><span class="p">)</span>
+    <span class="n">hash_raw</span> <span class="o">=</span> <span class="n">md5_b64decode</span><span class="p">(</span><span class="n">base_hash</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">):</span>
+        <span class="n">new_uri</span> <span class="o">=</span> <span class="n">base_new_uri</span> <span class="o">+</span> <span class="n">md5_padding</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">base_new_uri_len</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">host</span> <span class="o">+</span> <span class="n">urllib</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">new_uri</span><span class="p">)</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">md5</span><span class="o">.</span><span class="n">MD5Type</span><span class="p">()</span>
+        <span class="n">md5_set_state</span><span class="p">(</span><span class="n">extension</span><span class="p">,</span> <span class="n">hash_raw</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="mi">64</span><span class="p">)</span>
+        <span class="n">extension</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_expire</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">+=</span> <span class="s">&#39;?st=&#39;</span> <span class="o">+</span> <span class="n">base64</span><span class="o">.</span><span class="n">urlsafe_b64encode</span><span class="p">(</span><span class="n">extension</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">&#39;=&#39;</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">+=</span> <span class="s">&#39;&amp;e=&#39;</span> <span class="o">+</span> <span class="n">new_expire</span>
+        <span class="c">#print req</span>
+        <span class="n">urlobj</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">urlobj</span><span class="o">.</span><span class="n">getcode</span><span class="p">()</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">urlobj</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+
+	<p>To build new requests, Eve must append new data next to the original. Therefore, the purpose of this function <code>md5_set_state()</code> is to recreate the final MD5 state from the input <code>state</code> a previously returned MD5 hash value. It does so by assigning the four variables <code>A, B, C, D</code> and by setting the current length to the estimated value <code>data_len</code> which is a multiple of 64. The goal is that after the call to this function the caller will be able to add new input data to hash just by calling the method <code>md5.update(new_appended_data)</code> this will eventually result in a hash of:</p>
+
+	<pre>original_hashed_data || pad1 || new_appended_data || pad2 = rr43nn-gMTS_paYH/p/eve/restricted.txt1295613171 || pad1 || 1658275195 || pad2</pre>
+
+	<p>Where <code>1658275195</code> will be the new expiration date choosen by Eve. Notice you won't really have to know the secret key to recreate this state nor for updating it with new data. All is needed is the previous hash value and the size of the hashed data.</p>
+
+<div class="highlight"><pre>
+<span class="k">def</span> <span class="nf">md5_set_state</span><span class="p">(</span><span class="n">md5obj</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">data_len</span><span class="p">):</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">&quot;&lt;IIII&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+    <span class="n">md5obj</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="n">A</span>
+    <span class="n">md5obj</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">B</span>
+    <span class="n">md5obj</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">C</span>
+    <span class="n">md5obj</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">D</span>
+    <span class="n">md5obj</span><span class="o">.</span><span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_len</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+</pre></div>
+
+	<p>This function <code>md5_padding()</code> is used to recreate the padding that was appended at the end of the original hashed fields <code>key || uri || timestamp = rr43nn-gMTS_paYH/p/eve/restricted.txt1295613171</code> to round the input data to a multiple of its block size, i.e. 64 bytes, before being hashed. The exact length <code>data_len</code> of the input (without the padding) is required because its value in bits must be appended at the end of the last input block, just after the padding bytes. At exception of the first byte all others padding bytes are null bytes <code>\x00</code>. This function returns the padding.</p>
+
+<div class="highlight"><pre>
+<span class="k">def</span> <span class="nf">md5_padding</span><span class="p">(</span><span class="n">data_len</span><span class="p">):</span>
+    <span class="n">data_len</span> <span class="o">=</span> <span class="n">data_len</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">data_len</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x3f</span><span class="n">L</span>
+    <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">56</span><span class="p">:</span>
+        <span class="n">pad_len</span> <span class="o">=</span> <span class="mi">56</span> <span class="o">-</span> <span class="n">index</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pad_len</span> <span class="o">=</span> <span class="mi">120</span> <span class="o">-</span> <span class="n">index</span>
+    <span class="n">padding</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\x80</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x00</span><span class="s">&#39;</span> <span class="o">*</span> <span class="mi">63</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">((</span><span class="n">data_len</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">8</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xff</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">padding</span><span class="p">[:</span><span class="n">pad_len</span><span class="p">]</span> <span class="o">+</span> <span class="n">bits</span>
+</pre></div>
+
+
+<h2>Server's modification</h2>
+
+	<p>What separates this toy server from the real Nginx's implementation is the fact that it tolerates the presence of null-bytes characters <code>%00</code> in the URI coming from the MD5 padding. It's not standard, therefore a good server implementation must prevent their use and it's precisely what Nginx does and what was artificially modified in order to make this challenge work. The modified source file is <a href="https://github.com/git-mirror/nginx/blob/master/src/http/ngx_http_parse.c">ngx_http_parse.c</a>, see <a href="/crypto/challenge_nginx/solution/ngx_http_parse.c.diff">ngx_http_parse.c.diff</a>. This is the unique modification made to the server. </p>
+
+<div class="highlight"><pre><span class="gd">--- ngx_http_parse.c.orig	2011-01-25 05:11:18.157809998 +0100</span>
+<span class="gi">+++ ngx_http_parse.c	2011-01-25 05:11:35.225810002 +0100</span>
+<span class="gu">@@ -1247,9 +1247,7 @@</span>
+                     ch = *p++;
+                     break;
+
+<span class="gd">-                } else if (ch == &#39;\0&#39;) {</span>
+<span class="gd">-                    return NGX_HTTP_PARSE_INVALID_REQUEST;</span>
+<span class="gd">-                  }</span>
+<span class="gi">+                }</span>
+
+                 state = quoted_state;
+                 break;
+</pre></div>
+
+
+<h2>Putting it all together</h2>
+	<p>Eve executes <a href="/crypto/challenge_nginx/solution/challenge.py">challenge.py</a> with as arguments the original valid MD5 hash and the original timestamp value. This script stops as soon it receives a <code>200</code> response from the server.</p>
+	<div class="highlight"><pre>python challenge.py aSYSRnsL0by4M1l1tbPcrQ 1295613171</pre></div>
+
+	<p>Next lines represent a sample of requests handled by the server, each request corresponds to a guess on the password's length. The last one is the right one.</p>
+	<pre style="overflow: auto; word-wrap: normal;">
+"GET /p/eve/restricted.txt1295613171%80%00%00%00%00%00%00%00%00%00%00%00%00%00P%01%00%00%00%00%00%00?st=laULxGqve-HpudB615N5Nw&amp;e=1658275195 HTTP/1.0" 403
+"GET /p/eve/restricted.txt1295613171%80%00%00%00%00%00%00%00%00%00%00%00%00X%01%00%00%00%00%00%00?st=laULxGqve-HpudB615N5Nw&amp;e=1658275195 HTTP/1.0" 403
+"GET /p/eve/restricted.txt1295613171%80%00%00%00%00%00%00%00%00%00%00%00%60%01%00%00%00%00%00%00?st=laULxGqve-HpudB615N5Nw&amp;e=1658275195 HTTP/1.0" 403
+"GET /p/eve/restricted.txt1295613171%80%00%00%00%00%00%00%00%00%00%00h%01%00%00%00%00%00%00?st=laULxGqve-HpudB615N5Nw&amp;e=1658275195 HTTP/1.0" 403
+"GET /p/eve/restricted.txt1295613171%80%00%00%00%00%00%00%00%00%00p%01%00%00%00%00%00%00?st=laULxGqve-HpudB615N5Nw&amp;e=1658275195 HTTP/1.0" 403
+"GET /p/eve/restricted.txt1295613171%80%00%00%00%00%00%00%00%00x%01%00%00%00%00%00%00?st=laULxGqve-HpudB615N5Nw&amp;e=1658275195 HTTP/1.0" <span class="hl-green">200</span>
+	</pre>
+
+	<p>Following this last request, where Eve made a good guess and issued a <a href="http://cc.dbzteam.org:9000/p/eve/restricted.txt1295613171%80%00%00%00%00%00%00%00%00x%01%00%00%00%00%00%00?st=laULxGqve-HpudB615N5Nw&amp;e=1658275195">valid request</a>, Eve accessed the restricted file and was able to read it. It contains the number:</p>
+	<pre>42</pre>
+
+
+	<h2>Wrapping up, security issues</h2>
+	<ul>
+	  <li>The secure link module would be stronger using a real <a href="http://en.wikipedia.org/wiki/HMAC">HMAC</a> not one based on a custom hash construction</li>
+	  <li>Another issue is the potential lack of entropy of the password/passphrase used to set-up the module. It would be worth considering deriving a key from the password and a salt using a password key derivation scheme such as <a href="http://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> or <a href="http://www.tarsnap.com/scrypt.html">scrypt</a></li>
+	  <li>A non-related issue is the presence of a non constant-time hash comparison in <a href="https://github.com/git-mirror/nginx/blob/master/src/http/modules/ngx_http_secure_link_module.c#L177">ngx_http_secure_link_module.c</a>, this may enable an attacker only knowing a valid URI to guess the secret hash value associated to a choosen expiration date, read the extensive work of <a href="http://www.rootlabs.com/">Nate Lawson</a> on the subject <a href="http://rdist.root.org/2010/07/19/exploiting-remote-timing-attacks/">here</a>, <a href="http://rdist.root.org/2010/08/05/optimized-memcmp-leaks-useful-timing-differences/">here</a> and <a href="http://rdist.root.org/2010/11/09/blackhat-2010-video-on-remote-timing-attacks/">here</a>
+
+<div class="highlight"><pre>    <span class="n">ngx_md5_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">md5</span><span class="p">);</span>
+    <span class="n">ngx_md5_update</span><span class="p">(</span><span class="o">&amp;</span><span class="n">md5</span><span class="p">,</span> <span class="n">val</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">val</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+    <span class="n">ngx_md5_final</span><span class="p">(</span><span class="n">md5_buf</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">md5</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="hl-orange"><span class="n">ngx_memcmp</span><span class="p">(</span><span class="n">hash_buf</span><span class="p">,</span> <span class="n">md5_buf</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span></span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">goto</span> <span class="n">not_found</span><span class="p">;</span>
+    <span class="p">}</span>
+</pre></div>
+
+With <code>ngx_memcmp()</code> defined in <a href="https://github.com/git-mirror/nginx/blob/master/src/core/ngx_string.h">ngx_string.h</a> as:
+
+<div class="highlight"><pre><span class="cp">#define ngx_memcmp(s1, s2, n)  memcmp((const char *) s1, (const char *) s2, n)</span>
+</pre></div>
+	  </li>
+	</ul>
+
+      </div> <!-- content -->
+      </div> <!-- layout -->
+    </div> <!-- container -->
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

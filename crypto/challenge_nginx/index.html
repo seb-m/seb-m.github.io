@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="windows-1252">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="referrer" content="none">
+
+    <title>Nginx Crypto Challenge</title>
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/pygments.css">
+  </head>
+  <body>
+    <a class="sr-only" href="#content">Skip navigation</a>
+
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+      <div class="container">
+	<div class="navbar-header">
+	  <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+	  </button>
+	  <a href="/crypto/" class="navbar-brand">Cryptography</a>
+	</div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	  <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="/blog.html">Blog</a>
+            </li>
+            <li>
+              <a href="/">About</a>
+            </li>
+	  </ul>
+	</nav>
+      </div>
+    </header>
+
+    <div class="container content-streched main-content">
+      <div class="col-sm-10 col-sm-offset-1 col-md-10 col-md-offset-1 col-lg-10 col-lg-offset-1">
+      <div class="text-center">
+	<h1>Crypto Challenge</h1>
+	<h2>Help Eve defeat a weakened version of Nginx</h2>
+      </div>
+      <br />
+
+      <div id="content">
+	<h2>Description</h2>
+	<p>Eve did have a legitimate restricted access to a file located on <code>cc.dbzteam.org</code>, anytime she wanted consult this file she issued this request <code>http://cc.dbzteam.org:9000/p/eve/restricted.txt?st=aSYSRnsL0by4M1l1tbPcrQ&amp;e=1295613171</code> all was working perfectly fine until the date of 1-21-2011 where her link stopped working with the web server returning an error code <code>403</code> on any of her attempts.</p>
+
+	<p>Furious, she decided to understand what was going on and how to bypass this intolerable restriction. She quickly found out that the underlying server was a modified version of the <a href="http://wiki.nginx.org/Main">Nginx</a> web server.</p>
+
+	<pre>
+$ curl --head cc.dbzteam.org:9000
+HTTP/1.1 200 OK
+Server: <span class="hl-green">nginx-modified/0.9.4</span>
+Date: Tue, 25 Jan 2011 14:04:10 GMT
+Content-Type: text/html
+Content-Length: 176
+Last-Modified: Mon, 24 Jan 2011 23:38:08 GMT</pre>
+
+	<p>She further learned that this particular service was provided by the <a href="http://wiki.nginx.org/HttpSecureLinkModule">secure link</a> module. This module uses a server secret to authenticate the URI <code>/p/eve/restricted.txt</code> mixed with a timestamp <code>1295613171</code> (which explain how her access was revoked) to produce an authentication token. This authenticator takes the form of a secret MD5 hash <code>aSYSRnsL0by4M1l1tbPcrQ</code> assigned by the server to Eve. With this initial set of informations along with the ones provided below in the following section, would you help Eve in accessing and reading <code>restricted.txt</code> as she previously was able to do?</p>
+
+	<h2>Ressources and informations</h2>
+	<p>Consider the following additional ressources and informations.</p>
+
+	<ul>
+	  <li>Server's configuration <a href="/crypto/challenge_nginx/server.conf">server.conf</a>
+
+<div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
+   <span class="kn">listen</span>       <span class="mi">9000</span><span class="p">;</span>
+   <span class="kn">server_name</span>  <span class="s">cc.dbzteam.org</span><span class="p">;</span>
+
+   <span class="kn">access_log</span>   <span class="s">/var/log/nginx/org.dbzteam.seb.challenge.log</span><span class="p">;</span>
+
+   <span class="kn">root</span>		<span class="s">/var/www/cc</span><span class="p">;</span>
+
+   <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+      <span class="kn">index</span>  <span class="s">index.html</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="kn">location</span> <span class="s">/p/</span> <span class="p">{</span>
+      <span class="kn">secure_link</span>	<span class="nv">$arg_st,$arg_e</span><span class="p">;</span>
+      <span class="kn">secure_link_md5</span>   <span class="s">&lt;pass&gt;</span><span class="nv">$uri$arg_e</span><span class="p">;</span>
+
+      <span class="kn">if</span> <span class="s">(</span><span class="nv">$secure_link</span> <span class="p">=</span> <span class="s">&quot;&quot;)</span> <span class="p">{</span>
+          <span class="kn">return</span> <span class="mi">403</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="kn">if</span> <span class="s">(</span><span class="nv">$secure_link</span> <span class="p">=</span> <span class="s">&quot;0&quot;)</span> <span class="p">{</span>
+          <span class="kn">return</span> <span class="mi">403</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="kn">rewrite</span> <span class="s">^</span> <span class="s">/p/restricted.txt</span> <span class="s">break</span><span class="p">;</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+	  </li>
+
+	  <li>Secure link's <a href="http://wiki.nginx.org/HttpSecureLinkModule">documentation</a></li>
+	  <li>The function <a href="https://github.com/git-mirror/nginx/blob/master/src/http/modules/ngx_http_secure_link_module.c#L99">ngx_http_secure_link_variable()</a> in <a href="https://github.com/git-mirror/nginx/blob/master/src/http/modules/ngx_http_secure_link_module.c">ngx_http_secure_link_module.c</a> where the secure link functionality is implemented</li>
+	  <li>The target server, running at address <a href="http://cc.dbzteam.org:9000/">http://cc.dbzteam.org:9000</a></li>
+	  <li>Nginx's <a href="/crypto/challenge_nginx/configure-nginx.sh">compilation directives</a> used to compile a modified version of <a href="http://nginx.org/download/nginx-0.9.4.tar.gz">nginx-0.9.4</a></li>
+	</ul>
+
+	<h2>Note</h2>
+	<p>The challenge is implemented on a slightly but fatally <b>modified / weakened version of Nginx</b>, that means that this exploit <b>does not affect</b> the <i>real</i> Nginx server. Although as you will observe this module would be better off not presenting no such kind of risks at all. For not spoiling this challenge the issues highlighted in this exercice will only be discussed in depth later in the solution, not now.</p>
+
+	<h2>Solution</h2>
+	<p><a href="/crypto/challenge_nginx/solution/">here is the solution</a> with code and with a short description.</p>
+      </div> <!-- content -->
+      </div> <!-- layout -->
+    </div> <!-- container -->
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+%% type de document et options associées
+\documentclass[10pt,a4paper,twoside]{article}
+
+
+%% inclusion de packages
+
+\usepackage{fancyhdr}
+%\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{color}
+\usepackage[normalem]{ulem}
+\usepackage{a4wide} % pour bien cadrer sur la page
+\usepackage{url}
+\usepackage{array}
+\usepackage{fancybox}
+%\usepackage{listings}
+%\usepackage{latexsym}
+%\usepackage{pifont}
+
+%% pour les maths
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amstext}
+\usepackage{amsthm}
+\usepackage{tipa}
+%\usepackage{cases}
+
+%hypperef
+\usepackage{hyperref}
+\hypersetup{bookmarks,bookmarksnumbered,bookmarksopen,colorlinks,linkcolor=blue,citecolor=blue,dvips,pdfpagemode=fullscreen,pagebackref=true}
+
+%% pour les graphiques
+%\usepackage{graphicx} % importer des graphique
+%\usepackage{graphics}
+%\usepackage{float}
+
+%% divers
+%\usepackage{bnf} % grammaires
+%\usepackage{moreverb}  % encadrer le text verbatim
+%\usepackage{newalg}
+%\usepackage{footnote} % pour reinitialiser les numeros des notes
+%\usepackage{endnotes}
+%\usepackage{multirow}
+%\usepackage{minitoc}
+%\usepackage{pst-all}
+%\usepackage{hhline}
+%\usepackage{slashbox}
+%\usepackage{longtable}
+%\usepackage{algorithmic}
+
+\usepackage[francais]{babel}
+
+% styles settings
+\pagestyle{fancy}
+
+% custom commands
+\include{command}
+
+
+%% auteurs
+
+\author{Diala \textsc{kheir}\\
+  \texttt{kheir@enst.fr}
+  \and 
+  Sébastien \textsc{martini}\\
+  \texttt{martini@enst.fr}
+  \and
+  Samuel \textsc{tiberghien}\\
+  \texttt{tiberghien@enst.fr}
+}
+
+%% titre
+
+\title{INFMDI356\\
+  Étude de l'article : On The Fly Signatures based on Factoring
+}
+
+
+% début du corps du document
+\begin{document}
+
+\maketitle
+
+% permet d'inclure la bibliographie
+%\nocite{*}
+\bibliographystyle{plain}
+
+% table des matières
+%\tableofcontents
+
+% inclus le corps du rapport
+\input{body.tex}
+
+% insertion de la bibliographie
+\bibliography{bibliographie}
+
+% fin du corps du document
+\end{document}
