@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["ProtBuf","A protected Buffer"]],"type":[["ProtBuf8","Buffer of bytes"]]});

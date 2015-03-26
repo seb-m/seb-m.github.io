@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["Allocator","Base trait for memory allocators"],["KeyAllocator","Trait for keys allocators"]],"type":[["DefaultBufferAllocator","Default buffer allocator"],["DefaultKeyAllocator","Default key allocator"]],"struct":[["ProtectedBufferAllocator","Protected buffer allocator"],["ProtectedKeyAllocator","Protected key allocator"]]});
