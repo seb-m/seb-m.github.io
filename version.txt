@@ -1,2 +1,7 @@
-now: bootstrap-3.2.0
-was: bootstrap-3.0.3
+* Bootstrap:
+  current : 3.3.4
+  previous: 3.2.0
+
+* JQuery:
+  current : 1.11.2
+  previous: 1.10.2
