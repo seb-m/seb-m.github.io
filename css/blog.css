@@ -1,9 +1,9 @@
 /* Blog */
 
 .entry_content {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
-  line-height: 1.45em;
+  line-height: 1.5em;
   word-wrap: break-word;
 }
 
@@ -16,7 +16,7 @@ blockquote,
 blockquote p,
 .blockquote p {
   font-size: 14px;
-  line-height: 1.35em;
+  line-height: 1.45em;
   font-weight: 400;
 }
 
