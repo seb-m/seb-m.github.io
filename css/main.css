@@ -1,34 +1,19 @@
 /* Chunks are shamelessly copied from Boostrap's documentation */
 
-
-@font-face {
-    font-family: 'Raleway';
-    src: url('../fonts/Raleway/Raleway-Regular-webfont.eot');
-    src: url('../fonts/Raleway/Raleway-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/Raleway/Raleway-Regular-webfont.woff2') format('woff2'),
-         url('../fonts/Raleway/Raleway-Regular-webfont.woff') format('woff'),
-         url('../fonts/Raleway/Raleway-Regular-webfont.ttf') format('truetype'),
-         url('../fonts/Raleway/Raleway-Regular-webfont.svg#ralewayregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
 body {
-  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
   padding-top: 50px; /* Account for fixed navbar */
   color: rgb(64, 64, 64);
-  font-size: 13px;
+  font-size: 14px;
   background-color: #f1f1f1;
   text-rendering: optimizelegibility;
 }
 
 .bs-docs-nav {
   background-color: #f1f1f1;
-  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* Custom classes */
