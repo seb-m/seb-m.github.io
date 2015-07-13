@@ -1,7 +1,7 @@
 /* Blog */
 
 .entry_content {
-  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: -webkit-system-font, -apple-system-font, ".SFNSDisplay-Regular", "Lucida Grande", Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.5em;
   word-wrap: break-word;
